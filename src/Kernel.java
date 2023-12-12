@@ -7,14 +7,26 @@ public class Kernel {
     // Outras responsabilidades
 
     // Método para iniciar a execução do kernel
+
+    // inicializa os sub-componentes e outras cenas
     public void start() {
         // Inicialização e execução dos subcomponentes
-        // ...
+        MEM mem = new MEM();
+        CPU cpu = new CPU();
+        Middleware middleware = new Middleware(cpu, mem);
+
+        Thread cpuThread = new Thread(cpu);
+        
+        // Exemplo de inicialização de tarefas
+        cpu.addTask(() -> middleware.sendData("Dados do satélite"));
+        
+        // Iniciar a execução da CPU em uma thread separada
+        cpuThread.start();
     }
 
-    // Método para encerrar a execução do kernel
+    // encerramento dos sub-componentes e outras cenas
     public void shutdown() {
-        // Encerramento dos subcomponentes
+        // Encerramento dos subcomponentes, se necessário
         // ...
     }
 }

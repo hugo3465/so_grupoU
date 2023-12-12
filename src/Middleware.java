@@ -4,18 +4,43 @@ public class Middleware {
     // Estrutura de dados para gerenciar mensagens e objetos
     // Definição de serviço de comunicação de satélite
 
-    // Por simplicidade, considere uma estrutura de dados com tamanho de cinco unidades
-    private Object[] dataStructure = new Object[5];
+    private CPU cpu;
+    private MEM mem;
 
-    // Métodos para escrever e ler na estrutura de dados
-    public void writeData(Object data, int index) {
-        // Escrever dados na estrutura
-        // ...
+    public Middleware(CPU cpu, MEM mem) {
+        this.cpu = cpu;
+        this.mem = mem;
     }
 
-    public Object readData(int index) {
-        // Ler dados da estrutura
+    // Método para enviar dados do satélite para a estação
+    public synchronized void sendData(String data) {
+        // Lógica para enviar dados utilizando protocolos de comunicação
         // ...
-        return null;
+        // Armazenar dados na MEM para simular a comunicação com a estação
+
+
+        // Lógica simulada de envio de dados utilizando protocolos de comunicação
+        System.out.println("A enviar dados: " + data);
+        
+        // Armazenar dados na MEM para simular a comunicação com a estação
+    
+        mem.storeData(data);
+    }
+
+    // Método para receber dados da estação para o satélite
+    public synchronized String receiveData() {
+        // Lógica para receber dados utilizando protocolos de comunicação
+        // ...
+
+        // Recuperar dados da MEM para simular a comunicação com a estação
+
+
+
+        // Lógica simulada de recebimento de dados utilizando protocolos de comunicação
+        String receivedData = "Dados recebidos da estação";
+        System.out.println("A receber dados: " + receivedData);
+        
+        // Recuperar dados da MEM para simular a comunicação com a estação        
+        return mem.retrieveData();
     }
 }

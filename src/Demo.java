@@ -8,10 +8,19 @@ public class Demo {
 
         MEM mem = new MEM();
         CPU cpu = new CPU();
-        Middleware middleware = new Middleware();
+        Middleware middleware = new Middleware(cpu, mem);
 
-        // Utilização dos componentes conforme necessário
-        // ...
+        Thread cpuThread = new Thread(cpu);
+
+         // Exemplo de adição de tarefas à CPU
+         cpu.addTask(() -> System.out.println("Tarefa 1 sendo executada"));
+         cpu.addTask(() -> System.out.println("Tarefa 2 sendo executada"));
+ 
+         // Iniciar a execução da CPU em uma thread separada
+         cpuThread.start();
+ 
+         // Outras operações do sistema
+         // ...
 
         kernel.shutdown();
     }
