@@ -1,3 +1,4 @@
+import java.util.concurrent.LinkedBlockingQueue;
 /**
  * Unidade de memória
  */

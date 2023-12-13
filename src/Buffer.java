@@ -1,23 +1,30 @@
 import Exceptions.EmptyBufferException;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class Buffer {
-    private char[] buffer;
+    private LinkedBlockingQueue<String> buffer;
     private int bufferCount;
 
     public Buffer() {
-        this.buffer = new char[5];
+        this.buffer = new LinkedBlockingQueue<>();
         this.bufferCount = 0;
     }
-
+    /* Penso que não seja preciso este metodo uma vezque é uma queue */
     public boolean isFull() {
-        return (bufferCount == buffer.length);
+        return (bufferCount == buffer.size());
     }
 
-    public synchronized void put(char character) {
-        if (!isFull()) {
-            buffer[bufferCount] = character;
-            bufferCount++;
+    public synchronized void put(String elementString) {
+        try {
+            buffer.put(elementString);
+            System.out.println("Dado colocado no buffer" + elementString);
+        } catch (Exception e) {
+            // TODO: handle exception
         }
+        // if (!isFull()) {
+        //     buffer[bufferCount] = character;
+        //     bufferCount++;
+        // }
     }
 
     private boolean isEmpty() {
