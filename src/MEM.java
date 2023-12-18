@@ -1,6 +1,8 @@
 /**
- * Unidade de memória
+ * Unidade de memória, memory manager, contém a lógica para gerenciar a memória
  */
+
+// Buffer para guardar a infomração
 public class MEM {
     // Armazenamento e manipulação de dados
     // Recursos necessários ao funcionamento do satélite

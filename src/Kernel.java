@@ -1,5 +1,9 @@
 /**
  * Kernel do sistema operativo
+ * O que deve fazer:
+ *  - mantém as estruturas de dados e respetiva validação 
+ *  - controla as tarefas a executar
+ *  - lança a execução dos outros componentes e o seu término
  */
 public class Kernel {
     // Estruturas de dados e validação

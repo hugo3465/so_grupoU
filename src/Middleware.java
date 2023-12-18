@@ -43,4 +43,6 @@ public class Middleware {
         // Recuperar dados da MEM para simular a comunicação com a estação        
         return mem.retrieveData();
     }
+
+    // Implemente lógica para comunicação entre tarefas
 }
