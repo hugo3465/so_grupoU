@@ -21,7 +21,7 @@ public class CPU implements Runnable {
     public synchronized void addTask(Task task) {
         try {
             taskQueue.put(task);
-            System.out.println("Tarefa agendada: " + task.getName());
+            System.out.println("Tarefa agendada");
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }

@@ -18,22 +18,34 @@ public class Middleware {
     }
 
     // Método para enviar dados do satélite para a estação
-    public synchronized void send(String data) {
+    public synchronized void send(Task task) {
         // Lógica para enviar dados utilizando protocolos de comunicação
         // ...
         // Armazenar dados na MEM para simular a comunicação com a estação
 
 
         // Lógica simulada de envio de dados utilizando protocolos de comunicação
-        System.out.println("A enviar dados: " + data);
+        System.out.println("A enviar dados");
         
         // Armazenar dados na MEM para simular a comunicação com a estação
-    
-        mem.storeData(data);
+
+        try {
+            semaphore.acquire();
+            kernel.receiveTask(task);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        } /*finally {
+            semaphore.release();
+        }*/
     }
 
-    // Método para receber dados da estação para o satélite
-    public synchronized String receive() {
+    /**
+     * Método para receber dados da estação para o satélite
+     * 
+     * @param taskThatAnswered identificador de qual task respondeu
+     * @param response resposta que a task deu
+     */
+    public synchronized void receive(Task taskThatAnswered, String response) {
         // Lógica para receber dados utilizando protocolos de comunicação
         // ...
 
@@ -42,12 +54,10 @@ public class Middleware {
 
 
         // Lógica simulada de recebimento de dados utilizando protocolos de comunicação
-        String receivedData = "Dados recebidos da estação";
-        System.out.println("A receber dados: " + receivedData);
+        System.out.println("[" + taskThatAnswered.getName() + "] respondeu com: " + response);
         
-        // Recuperar dados da MEM para simular a comunicação com a estação        
-        return mem.retrieveData();
+        // Recuperar dados da MEM para simular a comunicação com a estação 
+        
+        semaphore.release();
     }
-
-    // Implemente lógica para comunicação entre tarefas
 }
