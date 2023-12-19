@@ -10,25 +10,17 @@ public class Kernel {
     // Controlo das tarefas a executar
     // Outras responsabilidades
 
-    // Método para iniciar a execução do kernel
+    private MEM mem;
+    private CPU cpu;
 
-    // inicializa os sub-componentes e outras cenas
+    // inicializa os sub-componentes e outras coisas
     public void start() {
         // Inicialização e execução dos subcomponentes
-        MEM mem = new MEM();
-        CPU cpu = new CPU();
-        Middleware middleware = new Middleware(cpu, mem);
-
-        Thread cpuThread = new Thread(cpu);
-        
-        // Exemplo de inicialização de tarefas
-        cpu.addTask(() -> middleware.sendData("Dados do satélite"));
-        
-        // Iniciar a execução da CPU em uma thread separada
-        cpuThread.start();
+        this.mem = new MEM();
+        this.cpu = new CPU();
     }
 
-    // encerramento dos sub-componentes e outras cenas
+    // encerramento dos sub-componentes e outras coisas
     public void shutdown() {
         // Encerramento dos subcomponentes, se necessário
         // ...

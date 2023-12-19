@@ -1,8 +1,15 @@
 public class Task implements Runnable {
+    
     private String name;
 
-    public Task(String name) {
+    /**
+     * The ammount of memmory that the task will use
+     */
+    private int memmory;
+
+    public Task(String name, int memmory) {
         this.name = name;
+        this.memmory = memmory;
     }
 
     @Override
