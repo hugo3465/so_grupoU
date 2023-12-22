@@ -43,6 +43,7 @@ public class Task implements Runnable {
             // Task has completed, inform the CPU
             cpu.taskCompleted(this, "dummy conclusion message");
         } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
