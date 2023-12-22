@@ -3,6 +3,11 @@ public class Task implements Runnable {
     /**
      * 
      */
+    private static CPU cpu;
+
+    /**
+     * 
+     */
     private String name;
 
     /**
@@ -15,9 +20,15 @@ public class Task implements Runnable {
      */
     private int memmory;
 
-    public Task(String msg, int memmory) {
+    public Task(String name, String msg, int memmory) {
+        this.name = name;
         this.msg = msg;
         this.memmory = memmory;
+    }
+
+    // Static method to set the CPU instance
+    protected static void setCPU(CPU cpuInstance) {
+        cpu = cpuInstance;
     }
 
     @Override
@@ -29,12 +40,11 @@ public class Task implements Runnable {
             Thread.sleep(1000); // por defeito as task vão durar 1 segundo, no futuro gostaria que cada uma
                                 // demorasse tempos diferentes
 
-
+            // Task has completed, inform the CPU
+            cpu.taskCompleted(this, "dummy conclusion message");
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        } finally {
-            // faz receive
         }
     }
 

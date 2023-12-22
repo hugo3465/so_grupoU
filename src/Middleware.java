@@ -12,9 +12,9 @@ public class Middleware {
     private Semaphore semaphore;
     private Kernel kernel;
 
-    public Middleware(Kernel kernel) {
+    public Middleware() {
         this.semaphore = new Semaphore(MIDDLEWARE_SIZE);
-        this.kernel = kernel;
+        this.kernel = new Kernel(this);
     }
 
     // Método para enviar dados do satélite para a estação
@@ -34,9 +34,7 @@ public class Middleware {
             kernel.receiveTask(task);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-        } /*finally {
-            semaphore.release();
-        }*/
+        }
     }
 
     /**
@@ -59,5 +57,17 @@ public class Middleware {
         // Recuperar dados da MEM para simular a comunicação com a estação 
         
         semaphore.release();
+    }
+
+    public void turnOnOperatingSystem() {
+        System.out.println("A iniciar o Sistema Operativo...");
+        kernel.start();
+        System.out.println("Ligado");
+    }
+
+    public void turnOffOperatingSystem() {
+        System.out.println("A encerrar o Sistema Operativo...");
+        kernel.shutdown();
+        System.out.println("Encerrado");
     }
 }
