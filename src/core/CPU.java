@@ -1,3 +1,4 @@
+package core;
 /**
  * unidade de processamento
  * O que deve fazer:
@@ -21,11 +22,10 @@ public class CPU implements Runnable {
     public void run() {
         try {
             while (!kernel.isOnShutoDownProcess()) {
-                Task currentTask = null;
-                // Obter e executar a próxima tarefa da fila, caso haja uma
-                if (!kernel.waitingTasks.isEmpty()) {
-                    currentTask = kernel.waitingTasks.take();
-                }
+                Task currentTask;
+
+                // Obter e executar a próxima tarefa da fila, se não tiver, devolve null
+                currentTask = kernel.waitingTasks.poll();
 
                 // se houver uma tarefa para na lista, vai inicia-la e adicioná-la à lista de
                 // tarefas em execução

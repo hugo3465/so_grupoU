@@ -1,5 +1,6 @@
-import Exceptions.NegativeMemmoryException;
-import Exceptions.OutOfMemmoryException;
+package core;
+import exceptions.NegativeMemmoryException;
+import exceptions.OutOfMemmoryException;
 
 /**
  * Unidade de memória, memory manager, contém a lógica para gerenciar a memória
