@@ -1,5 +1,9 @@
+package core;
+
 import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
+
+import util.TaskScheduler;
 
 /**
  * Kernel do sistema operativo
@@ -18,11 +22,11 @@ public class Kernel {
     private MEM mem;
     private CPU cpu;
 
-    private Thread cpuThread;
+    private Thread cpuThread; // acho que posso até tirar isto daqui
 
     // uma linkedBolckingQueue funciona como uma queue, mas a cabeça da fila é o
     // elemento que está na fila há mais tempo.
-    protected LinkedBlockingQueue<Task> waitingTasks;
+    protected TaskScheduler waitingTasks;
 
     protected ArrayList<Task> tasksOnExecution;
 
@@ -38,7 +42,7 @@ public class Kernel {
     public Kernel(Middleware middleware) {
         this.middleware = middleware;
 
-        this.waitingTasks = new LinkedBlockingQueue<>(); // pode ter capacidade de 5
+        this.waitingTasks = new TaskScheduler(); // pode ter capacidade de 5
         this.isOnShutDownProcess = false;
         this.tasksOnExecution = new ArrayList<>();
         this.tasksTerminated = new ArrayList<>();
@@ -62,13 +66,11 @@ public class Kernel {
     protected synchronized void receiveTask(Task task) {
         // só pode adicionar tarefas, se o CPU não estiver em processo de
         if (!isOnShutDownProcess) {
-            try {
-                // TODO: Reservar a memória na MEM
-                waitingTasks.put(task);
-                System.out.println("Tarefa agendada");
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
+            
+            // TODO: Reservar a memória na MEM
+            waitingTasks.add(task);
+            System.out.println("Tarefa agendada");
+
         }
     }
 
@@ -82,18 +84,16 @@ public class Kernel {
         this.isOnShutDownProcess = true;
         waitingTasks.clear(); // Optionally, clear the task queue if you want to discard remaining tasks
 
-        // Espera até que todas as tarefas a serem executadas acabem, para encerrar o
-        // CPU
+        // Espera até que todas as tarefas em execução acabem, para encerrar o CPU
         while (!tasksOnExecution.isEmpty()) {
             try {
                 // Aguarda um curto período de tempo antes de verificar novamente
                 Thread.sleep(100);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
-                e.printStackTrace(); // Lidar com a interrupção conforme necessário
+                e.printStackTrace();
             }
         }
-
     }
 
     public boolean isOnShutoDownProcess() {

@@ -1,3 +1,7 @@
+import core.Middleware;
+import core.Task;
+import enums.TaskPriority;
+
 /**
  * Exemplo de utilização
  */
@@ -11,10 +15,10 @@ public class Demo {
         middleware.turnOnOperatingSystem();
 
         // Exemplo de adição de tarefas à CPU
-        Task task1 = new Task("task1", "Qualquer coisa", 40);
-        Task task2 = new Task("task2", "Qualquer coisa", 12);
-        Task task3 = new Task("task3", "Qualquer coisa", 12);
-        Task task4 = new Task("task4", "Qualquer coisa", 12);
+        Task task1 = new Task("task1", "Qualquer coisa", 40, TaskPriority.HIGH_PRIORITY);
+        Task task2 = new Task("task2", "Qualquer coisa", 12, TaskPriority.LOW_PRIORITY);
+        Task task3 = new Task("task3", "Qualquer coisa", 12, TaskPriority.LOW_PRIORITY);
+        Task task4 = new Task("task4", "Qualquer coisa", 12, TaskPriority.HIGH_PRIORITY);
         
         // adicionar estas tasks
         middleware.send(task1);

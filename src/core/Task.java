@@ -1,3 +1,7 @@
+package core;
+
+import enums.TaskPriority;
+
 public class Task implements Runnable {
 
     /**
@@ -20,10 +24,13 @@ public class Task implements Runnable {
      */
     private int memmory;
 
-    public Task(String name, String msg, int memmory) {
+    private TaskPriority priority;
+
+    public Task(String name, String msg, int memmory, TaskPriority priority) {
         this.name = name;
         this.msg = msg;
         this.memmory = memmory;
+        this.priority = priority;
     }
 
     // Static method to set the CPU instance
@@ -61,5 +68,9 @@ public class Task implements Runnable {
      */
     public String getName() {
         return this.name;
+    }
+
+    public TaskPriority getPriority() {
+        return this.priority;
     }
 }

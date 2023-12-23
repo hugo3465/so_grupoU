@@ -1,3 +1,4 @@
+package core;
 import java.util.concurrent.Semaphore;
 
 public class Middleware {
@@ -30,7 +31,7 @@ public class Middleware {
         // Armazenar dados na MEM para simular a comunicação com a estação
 
         try {
-           // semaphore.acquire();
+           semaphore.acquire();
             kernel.receiveTask(task);
         } catch (Exception e) { // mudar para InterruptedException
             Thread.currentThread().interrupt();
@@ -56,7 +57,7 @@ public class Middleware {
         
         // Recuperar dados da MEM para simular a comunicação com a estação 
         
-        //semaphore.release();
+        semaphore.release();
     }
 
     public void turnOnOperatingSystem() {
