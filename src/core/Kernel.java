@@ -1,7 +1,6 @@
 package core;
 
 import java.util.ArrayList;
-import java.util.concurrent.LinkedBlockingQueue;
 
 import util.TaskScheduler;
 
@@ -66,7 +65,7 @@ public class Kernel {
     protected synchronized void receiveTask(Task task) {
         // só pode adicionar tarefas, se o CPU não estiver em processo de
         if (!isOnShutDownProcess) {
-            
+
             // TODO: Reservar a memória na MEM
             waitingTasks.add(task);
             System.out.println("Tarefa agendada");

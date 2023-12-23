@@ -71,4 +71,16 @@ public class Middleware {
         kernel.shutdown();
         System.out.println("Encerrado");
     }
+
+    public int getNumberOfWaitingTasks() {
+        return kernel.waitingTasks.size();
+    }
+
+    public int getNumberOfExecutingTasks() {
+        return kernel.tasksOnExecution.size();
+    }
+
+    public int getNumberOfFinishedTasks() {
+        return kernel.tasksTerminated.size();
+    }
 }

@@ -1,0 +1,3 @@
+## Para as libs
+javac -cp .\Graficos\lib\jfreechart-1.5.4.jar .\Graficos\src\BarChartExample.java
+java -cp .\Graficos\lib\jfreechart-1.5.4.jar .\Graficos\src\BarChartExample.java
