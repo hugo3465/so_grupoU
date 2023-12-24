@@ -22,11 +22,17 @@ public class CPU implements Runnable {
     @Override
     public void run() {
         try {
-            while (!kernel.isOnShutoDownProcess()) {
+            while (kernel.isOn()) {
+                // quando o sistema operativo estiver em processo de encerramento, não pode executar mais tasks
+                if(kernel.isOnShutoDownProcess()) {
+                    continue;
+                }
                 Task currentTask;
 
                 // Obter e executar a próxima tarefa da fila, se não tiver, devolve null
-                currentTask = kernel.waitingTasks.poll();
+                synchronized (kernel.waitingTasks) {
+                    currentTask = kernel.waitingTasks.poll();
+                }
 
                 // se houver uma tarefa para na lista, vai inicia-la e adicioná-la à lista de
                 // tarefas em execução
@@ -34,11 +40,15 @@ public class CPU implements Runnable {
                     Thread task = new Thread(currentTask);
                     task.setName(currentTask.getName());
                     task.start();
-                    kernel.tasksOnExecution.add(currentTask);
+
+                    synchronized (kernel.tasksOnExecution) {
+                        kernel.tasksOnExecution.add(currentTask);
+                    }
+
                 }
 
-                // espera 100 milisegundos até executar a próxima tarefa da fila
-                Thread.sleep(100);
+                // espera 500 milisegundos até executar a próxima tarefa da fila
+                Thread.sleep(500);
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
@@ -61,6 +71,9 @@ public class CPU implements Runnable {
         }
 
         // manda a tarefa para o kernel, que por sua vez manda para o middleware
-        kernel.sendTask(task, response);
+        synchronized (kernel) {
+            kernel.sendTask(task, response);
+        }
+        
     }
 }

@@ -39,7 +39,7 @@ public class Demo implements Runnable {
         // TODO TIRAR
         int i = 0;
         Task taskEx = null;
-        while (i <= 10) {
+        while (i < 100) {
             switch (generateRandomNumber()) {
                 case 0:
                     taskEx = new Task("Auto generated" + i, "Auto Generated", 0, TaskPriority.HIGH_PRIORITY);
@@ -52,20 +52,22 @@ public class Demo implements Runnable {
             }
             i++;
             middleware.send(taskEx);
+            System.out.println("\n" + i);
 
-            Thread.sleep(500);
+            Thread.sleep(100);
         }
 
         // Outras operações do sistema
         // ...
 
         // Termina o sistema operativo
-        middleware.turnOffOperatingSystem();
+        System.out.println("\nA fazer shutdown");
+        //middleware.turnOffOperatingSystem();
     }
 
     @Override
     public void run() {
-        CircularChart example = new CircularChart("Tasks on CPU");
+        CircularChart example = new CircularChart("Tasks");
         example.setVisible(true);
 
         while (true) {

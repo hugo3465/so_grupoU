@@ -35,13 +35,22 @@ public class Kernel {
      */
     protected ArrayList<Task> tasksTerminated;
 
-    // acho que vou remover isto
-    private volatile boolean isOnShutDownProcess; // Flag to indicate CPU shutdown
+    /**
+     * Indica se o sistema operativo está ligado ou não
+     */
+    private boolean isOn;
+
+    /**
+     * Flag que indica se o sistema operativo está em processo de encerramento.
+     * Vai permanecer como true, até que não haja mais nenhuma task a ser executada
+     */
+    private boolean isOnShutDownProcess;
 
     public Kernel(Middleware middleware) {
         this.middleware = middleware;
 
         this.waitingTasks = new TaskScheduler(); // pode ter capacidade de 5
+        this.isOn = false;
         this.isOnShutDownProcess = false;
         this.tasksOnExecution = new ArrayList<>();
         this.tasksTerminated = new ArrayList<>();
@@ -57,6 +66,8 @@ public class Kernel {
 
         cpuThread = new Thread(cpu);
         cpuThread.start();
+
+        this.isOn = true;
     }
 
     // Método para receber uma tarefa do Middleware e colocar na lista de espera
@@ -67,7 +78,10 @@ public class Kernel {
         if (!isOnShutDownProcess) {
 
             // TODO: Reservar a memória na MEM
-            waitingTasks.add(task);
+            synchronized (waitingTasks) {
+                waitingTasks.add(task);
+            }
+            
             System.out.println("Tarefa agendada");
 
         }
@@ -75,13 +89,19 @@ public class Kernel {
 
     // acho que este pode nem estar syncronized
     protected synchronized void sendTask(Task task, String response) {
-        middleware.receive(task, response);
+        //synchronized (middleware) { // não sei se este syncronized faz sentido
+            middleware.receive(task, response);
+        //}
     }
 
     // encerramento dos sub-componentes e outras coisas
     public void shutdown() {
         this.isOnShutDownProcess = true;
-        waitingTasks.clear(); // Optionally, clear the task queue if you want to discard remaining tasks
+
+        synchronized (waitingTasks) {
+            waitingTasks.clear(); // Optionally, clear the task queue if you want to discard remaining tasks
+        }
+        
 
         // Espera até que todas as tarefas em execução acabem, para encerrar o CPU
         while (!tasksOnExecution.isEmpty()) {
@@ -93,9 +113,17 @@ public class Kernel {
                 e.printStackTrace();
             }
         }
+
+        // quando não houver mais nenhuma tarefa a ser executada ca CPU, encerra o sistema operativo
+        this.isOn = false;
+        this.isOnShutDownProcess = false;
     }
 
     public boolean isOnShutoDownProcess() {
         return this.isOnShutDownProcess;
+    }
+
+    public boolean isOn() {
+        return isOn;
     }
 }
