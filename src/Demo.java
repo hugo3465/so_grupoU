@@ -22,11 +22,16 @@ public class Demo implements Runnable {
         middleware.turnOnOperatingSystem();
         chartThread.start();
 
+
         // Exemplo de adição de tarefas à CPU
-        Task task1 = new Task("task1", "Qualquer coisa", 40, TaskPriority.HIGH_PRIORITY);
-        Task task2 = new Task("task2", "Qualquer coisa", 12, TaskPriority.LOW_PRIORITY);
-        Task task3 = new Task("task3", "Qualquer coisa", 12, TaskPriority.LOW_PRIORITY);
-        Task task4 = new Task("task4", "Qualquer coisa", 12, TaskPriority.HIGH_PRIORITY);
+        Task task1 = new Task("task1", "Qualquer coisa", 40, TaskPriority.HIGH_PRIORITY,
+                generateRandomNumber(1000, 10000));
+        Task task2 = new Task("task2", "Qualquer coisa", 12, TaskPriority.LOW_PRIORITY,
+                generateRandomNumber(1000, 10000));
+        Task task3 = new Task("task3", "Qualquer coisa", 12, TaskPriority.LOW_PRIORITY,
+                generateRandomNumber(1000, 10000));
+        Task task4 = new Task("task4", "Qualquer coisa", 12, TaskPriority.HIGH_PRIORITY,
+                generateRandomNumber(1000, 10000));
 
         // adicionar estas tasks
         middleware.send(task1);
@@ -40,12 +45,12 @@ public class Demo implements Runnable {
         int i = 0;
         Task taskEx = null;
         while (i < 100) {
-            switch (generateRandomNumber()) {
+            switch (generateRandomNumber(0, 1)) {
                 case 0:
-                    taskEx = new Task("Auto generated" + i, "Auto Generated", 0, TaskPriority.HIGH_PRIORITY);
+                    taskEx = new Task("Auto generated" + i, "Auto Generated", 0, TaskPriority.HIGH_PRIORITY, 5000);
                     break;
                 case 1:
-                    taskEx = new Task("Auto generated" + i, "Auto Generated", 0, TaskPriority.LOW_PRIORITY);
+                    taskEx = new Task("Auto generated" + i, "Auto Generated", 0, TaskPriority.LOW_PRIORITY, 5000);
                     break;
                 default:
                     break;
@@ -62,20 +67,26 @@ public class Demo implements Runnable {
 
         // Termina o sistema operativo
         System.out.println("\nA fazer shutdown");
-        //middleware.turnOffOperatingSystem();
+        middleware.turnOffOperatingSystem();
     }
 
     @Override
     public void run() {
-        CircularChart example = new CircularChart("Tasks");
-        example.setVisible(true);
+        TasksCircularChart circularChart = new TasksCircularChart("Tasks");
+        circularChart.setVisible(true);
+
+        TaskBarChart barChart = new TaskBarChart("Tasks");
+        barChart.setVisible(true);
 
         while (true) {
             // faz update do gráfico de 200 em 200 milisegundos
             try {
                 Thread.sleep(200);
-                example.updateDataset(middleware.getNumberOfWaitingTasks(), middleware.getNumberOfExecutingTasks(),
+                circularChart.updateDataset(middleware.getNumberOfWaitingTasks(),
+                        middleware.getNumberOfExecutingTasks(),
                         middleware.getNumberOfFinishedTasks());
+
+                barChart.updateDataset(middleware.getNumberOfWaitingTasks(), middleware.getNumberOfExecutingTasks());
 
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
@@ -86,9 +97,7 @@ public class Demo implements Runnable {
     }
 
     // TODO apenas para testes
-    public static int generateRandomNumber() {
-        int min = 0; // Min value
-        int max = 1; // Max value
+    public static int generateRandomNumber(int min, int max) {
 
         int randomInt = (int) Math.floor(Math.random() * (max - min + 1) + min);
 

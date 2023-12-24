@@ -67,6 +67,18 @@ public class Kernel {
         cpuThread = new Thread(cpu);
         cpuThread.start();
 
+        // TODO: testes, vários núcleos. Para apagar, isto foi apenas borga
+        // Thread nucleo2 = new Thread(cpu);
+        // nucleo2.start();
+        // Thread nucleo3 = new Thread(cpu);
+        // nucleo3.start();
+        // Thread nucleo4 = new Thread(cpu);
+        // nucleo4.start();
+        // Thread nucleo5 = new Thread(cpu);
+        // nucleo5.start();
+        // Thread nucleo6 = new Thread(cpu);
+        // nucleo6.start();
+
         this.isOn = true;
     }
 
@@ -81,7 +93,7 @@ public class Kernel {
             synchronized (waitingTasks) {
                 waitingTasks.add(task);
             }
-            
+
             System.out.println("Tarefa agendada");
 
         }
@@ -89,9 +101,7 @@ public class Kernel {
 
     // acho que este pode nem estar syncronized
     protected synchronized void sendTask(Task task, String response) {
-        //synchronized (middleware) { // não sei se este syncronized faz sentido
-            middleware.receive(task, response);
-        //}
+        middleware.receive(task, response);
     }
 
     // encerramento dos sub-componentes e outras coisas
@@ -101,7 +111,6 @@ public class Kernel {
         synchronized (waitingTasks) {
             waitingTasks.clear(); // Optionally, clear the task queue if you want to discard remaining tasks
         }
-        
 
         // Espera até que todas as tarefas em execução acabem, para encerrar o CPU
         while (!tasksOnExecution.isEmpty()) {
@@ -114,7 +123,8 @@ public class Kernel {
             }
         }
 
-        // quando não houver mais nenhuma tarefa a ser executada ca CPU, encerra o sistema operativo
+        // quando não houver mais nenhuma tarefa a ser executada ca CPU, encerra o
+        // sistema operativo
         this.isOn = false;
         this.isOnShutDownProcess = false;
     }
