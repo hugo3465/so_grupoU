@@ -50,13 +50,10 @@ public class CPU implements Runnable {
                             }
                         } catch (OutOfMemmoryException e) {
                             // se não tem memória suficiente para executar, volta para a fila de espera, e
-                            // passa para a próxima task
+                            // passa para a próxima tarefa
                             synchronized (kernel.waitingTasks) {
                                 kernel.waitingTasks.add(currentTask);
                             }
-
-                            // passa para a próxima tarefa
-                            continue;
                         } finally {
                             // espera 500 milisegundos até executar a próxima tarefa da fila
                             Thread.sleep(500);

@@ -77,6 +77,9 @@ public class Task implements Runnable {
 
             // Tarefa concluída, avisa a CPU
             cpu.taskCompleted(this, "Mensagem de conclusão fictícia");
+
+            // Notify waiting threads (if any)
+            notifyExecutionComplete();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             e.printStackTrace();
@@ -121,5 +124,14 @@ public class Task implements Runnable {
 
     public int getMemory() {
         return memory;
+    }
+
+    // para já estas dois métodos ainda não servem para nada
+    public synchronized void waitForExecution() throws InterruptedException {
+        wait();
+    }
+
+    public synchronized void notifyExecutionComplete() {
+        notify();
     }
 }
