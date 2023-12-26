@@ -1,6 +1,7 @@
 import core.Middleware;
 import core.Task;
 import enums.TaskPriority;
+import util.Configs;
 
 /**
  * Exemplo de utilização
@@ -15,6 +16,9 @@ public class Demo implements Runnable {
     }
 
     public static void main(String[] args) throws Exception {
+        // Create an instance of Configs
+        Configs configsInstance = new Configs();
+        long congif = Configs.getTempoAtualizacaoDoGrafico();
 
         Thread chartThread = new Thread(new Demo());
 
@@ -24,13 +28,13 @@ public class Demo implements Runnable {
 
         // Exemplo de adição de tarefas à CPU
         Task task1 = new Task("task1", "Qualquer coisa", 40, TaskPriority.HIGH_PRIORITY,
-                generateRandomNumber(1000, 10000));
+                generateRandomNumber(Configs.getTempoMinimoTarefa(), Configs.getTempoMaximoTarefa()));
         Task task2 = new Task("task2", "Qualquer coisa", 12, TaskPriority.LOW_PRIORITY,
-                generateRandomNumber(1000, 10000));
+                generateRandomNumber(Configs.getTempoMinimoTarefa(), Configs.getTempoMaximoTarefa()));
         Task task3 = new Task("task3", "Qualquer coisa", 12, TaskPriority.LOW_PRIORITY,
-                generateRandomNumber(1000, 10000));
+                generateRandomNumber(Configs.getTempoMinimoTarefa(), Configs.getTempoMaximoTarefa()));
         Task task4 = new Task("task4", "Qualquer coisa", 12, TaskPriority.HIGH_PRIORITY,
-                generateRandomNumber(1000, 10000));
+                generateRandomNumber(Configs.getTempoMinimoTarefa(), Configs.getTempoMaximoTarefa()));
 
         // adicionar estas tasks
         middleware.send(task1);
@@ -82,7 +86,7 @@ public class Demo implements Runnable {
         while (true) {
             // faz update do gráfico de 200 em 200 milisegundos
             try {
-                Thread.sleep(200);
+                Thread.sleep(Configs.getTempoAtualizacaoDoGrafico());
                 circularChart.updateDataset(middleware.getNumberOfWaitingTasks(),
                         middleware.getNumberOfExecutingTasks(),
                         middleware.getNumberOfFinishedTasks());
@@ -98,7 +102,7 @@ public class Demo implements Runnable {
     }
 
     // TODO apenas para testes
-    public static int generateRandomNumber(int min, int max) {
+    public static int generateRandomNumber(long min, long max) {
 
         int randomInt = (int) Math.floor(Math.random() * (max - min + 1) + min);
 

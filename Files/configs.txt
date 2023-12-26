@@ -1,0 +1,9 @@
+TamanhoMem: 500
+TempoMinimoTarefa:1000
+TempoMaximoTarefa:10000
+MensagemRespostaTarefa:Mensagem de conclusão fictícia
+TempoEsperaAteProximaTarefa:500
+PeriodoVerificacaoTarefasEmExecucao:100
+TempoAtualizacaoDoGrafico:200
+
+

@@ -3,6 +3,7 @@ package core;
 import java.util.ArrayList;
 
 import exceptions.OutOfMemmoryException;
+import util.Configs;
 import util.TaskScheduler;
 
 /**
@@ -118,7 +119,7 @@ public class Kernel {
         while (!tasksOnExecution.isEmpty()) {
             try {
                 // Aguarda um curto período de tempo antes de verificar novamente
-                Thread.sleep(100);
+                Thread.sleep(Configs.getPeriodoVerificacaoTarefasEmExecucao());
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 e.printStackTrace();

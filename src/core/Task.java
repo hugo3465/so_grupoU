@@ -1,6 +1,7 @@
 package core;
 
 import enums.TaskPriority;
+import util.Configs;
 
 /**
  * Representa uma tarefa a ser executada pelo sistema operativo.
@@ -76,7 +77,7 @@ public class Task implements Runnable {
             Thread.sleep(expectedTime);
 
             // Tarefa concluída, avisa a CPU
-            cpu.taskCompleted(this, "Mensagem de conclusão fictícia");
+            cpu.taskCompleted(this, Configs.getMensagemRespostaTarefa());
 
             // Notify waiting threads (if any)
             notifyExecutionComplete();
