@@ -118,4 +118,8 @@ public class Task implements Runnable {
     public int getExpectedTime() {
         return this.expectedTime;
     }
+
+    public int getMemory() {
+        return memory;
+    }
 }

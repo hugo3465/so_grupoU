@@ -2,6 +2,7 @@ package core;
 
 import java.util.ArrayList;
 
+import exceptions.OutOfMemmoryException;
 import util.TaskScheduler;
 
 /**
@@ -99,9 +100,10 @@ public class Kernel {
         }
     }
 
-    // acho que este pode nem estar syncronized
-    protected synchronized void sendTask(Task task, String response) {
+    protected void sendTask(Task task, String response) {
         middleware.receive(task, response);
+
+        mem.deallocateMemmory(task.getMemory());
     }
 
     // encerramento dos sub-componentes e outras coisas
@@ -127,6 +129,10 @@ public class Kernel {
         // sistema operativo
         this.isOn = false;
         this.isOnShutDownProcess = false;
+    }
+
+    public synchronized void reserveMemory(int memoryToReserve) throws OutOfMemmoryException {
+        mem.alocateMemmory(memoryToReserve);
     }
 
     public boolean isOnShutoDownProcess() {

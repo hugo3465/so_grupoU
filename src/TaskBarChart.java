@@ -29,7 +29,7 @@ public class TaskBarChart extends JFrame {
         chart = ChartFactory.createBarChart(
                 title,
                 "Tasks",
-                "Quantidade",
+                "Quantity",
                 dataset,
                 PlotOrientation.VERTICAL,
                 false,

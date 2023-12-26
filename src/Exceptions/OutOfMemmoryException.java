@@ -1,6 +1,6 @@
 package exceptions;
 
-public class OutOfMemmoryException extends RuntimeException {
+public class OutOfMemmoryException extends Exception {
     public OutOfMemmoryException() {
         super();
     }

@@ -1,18 +1,18 @@
 package core;
+
 import exceptions.NegativeMemmoryException;
 import exceptions.OutOfMemmoryException;
 
 /**
  * Unidade de memória, memory manager, contém a lógica para gerenciar a memória
  */
-
 // Buffer para guardar a infomração
 public class MEM {
 
     /**
      * 
      */
-    private final int MEMORY_MAX_SIZE = 200;
+    private final int MEMORY_MAX_SIZE = 500;
 
     /**
      * 
@@ -31,7 +31,7 @@ public class MEM {
         return (usedMemmory == 0);
     }
 
-    public synchronized void alocateMemmory(int memmoryToAllocate) {
+    public synchronized void alocateMemmory(int memmoryToAllocate) throws OutOfMemmoryException {
         if (isFull() || (usedMemmory + memmoryToAllocate) > MEMORY_MAX_SIZE) {
             throw new OutOfMemmoryException();
         }

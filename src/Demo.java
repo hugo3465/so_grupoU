@@ -22,7 +22,6 @@ public class Demo implements Runnable {
         middleware.turnOnOperatingSystem();
         chartThread.start();
 
-
         // Exemplo de adição de tarefas à CPU
         Task task1 = new Task("task1", "Qualquer coisa", 40, TaskPriority.HIGH_PRIORITY,
                 generateRandomNumber(1000, 10000));
@@ -47,10 +46,12 @@ public class Demo implements Runnable {
         while (i < 100) {
             switch (generateRandomNumber(0, 1)) {
                 case 0:
-                    taskEx = new Task("Auto generated" + i, "Auto Generated", 0, TaskPriority.HIGH_PRIORITY, 5000);
+                    taskEx = new Task("Auto generated" + i, "Auto Generated", 20, TaskPriority.HIGH_PRIORITY,
+                            generateRandomNumber(1000, 10000));
                     break;
                 case 1:
-                    taskEx = new Task("Auto generated" + i, "Auto Generated", 0, TaskPriority.LOW_PRIORITY, 5000);
+                    taskEx = new Task("Auto generated" + i, "Auto Generated", 20, TaskPriority.LOW_PRIORITY,
+                            generateRandomNumber(1000, 10000));
                     break;
                 default:
                     break;
