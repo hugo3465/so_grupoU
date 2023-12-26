@@ -3,7 +3,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class ConfigurationLoader {
-    // Métodos para carregar configurações a partir de um arquivo
+    // Métodos para carregar configurações a partir de um ficheiro
     // ...
 
     public Properties loadConfig(String configFile) throws IOException {

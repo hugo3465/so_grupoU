@@ -6,34 +6,48 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.data.general.DefaultPieDataset;
 import java.awt.Dimension;
 
-public class CircularChart extends JFrame {
+/**
+ * Representa um gráfico circular para visualizar a distribuição de tarefas em diferentes estados.
+ */
+public class TasksCircularChart extends JFrame {
+    private JFreeChart chart;
     private DefaultPieDataset dataset;
 
-    public CircularChart(String title) {
+    /**
+     * Construtor da classe TasksCircularChart.
+     *
+     * @param title Título do gráfico.
+     */
+    public TasksCircularChart(String title) {
         super(title);
 
-        // Create an initial dataset
+        // Cria um conjunto de dados inicial
         dataset = createDataset();
 
-        // Create a chart based on the dataset
-        JFreeChart chart = ChartFactory.createPieChart(
+        // Cria um gráfico com base no conjunto de dados
+        chart = ChartFactory.createPieChart3D( // Remova o 3D para desativar a representação tridimensional
                 title,
                 dataset,
                 true,
                 true,
                 false);
 
-        // Create a panel to display the chart
+        // Cria um painel para exibir o gráfico
         ChartPanel chartPanel = new ChartPanel(chart);
         chartPanel.setPreferredSize(new Dimension(560, 370));
 
-        // Set up the JFrame
+        // Configura o JFrame
         setContentPane(chartPanel);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
     }
 
+    /**
+     * Cria um conjunto de dados inicial para o gráfico.
+     *
+     * @return O conjunto de dados inicial.
+     */
     private DefaultPieDataset createDataset() {
         DefaultPieDataset dataset = new DefaultPieDataset();
         dataset.setValue("Waiting", 0);
@@ -42,20 +56,25 @@ public class CircularChart extends JFrame {
         return dataset;
     }
 
+    /**
+     * Atualiza o conjunto de dados com novos valores para tarefas em diferentes estados.
+     *
+     * @param waitingTasks   Quantidade de tarefas em espera.
+     * @param executingTasks Quantidade de tarefas em execução.
+     * @param finishedTasks  Quantidade de tarefas concluídas.
+     */
     public void updateDataset(int waitingTasks, int executingTasks, int finishedTasks) {
 
-        // Update values in the dataset (replace this logic with your own)
+        // Atualiza os valores no conjunto de dados (substitua esta lógica conforme necessário)
         dataset.setValue("Waiting", waitingTasks);
         dataset.setValue("Executing", executingTasks);
         dataset.setValue("Finished", finishedTasks);
 
-
-        // NÃO SEI SE ESTAS LINHAS ERAM IMPORTANTES
-        // Notify the chart that the dataset has changed
+        // Notifica o gráfico de que o conjunto de dados foi alterado
         // JFreeChart chart = ((ChartPanel) getContentPane().getComponent(0)).getChart();
         // chart.fireChartChanged();
 
-        // Repaint the chart panel
+        // Repinta o painel do gráfico
         // ((ChartPanel) getContentPane().getComponent(0)).repaint();
 
     }
