@@ -65,4 +65,8 @@ public class Middleware {
     public int getNumberOfFinishedTasks() {
         return kernel.tasksTerminated.size();
     }
+
+    public boolean isOperational() {
+        return kernel.isOn();
+    }
 }

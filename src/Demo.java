@@ -1,3 +1,5 @@
+import application.TaskBarChart;
+import application.TasksCircularChart;
 import core.Middleware;
 import core.Task;
 import enums.TaskPriority;
@@ -18,7 +20,6 @@ public class Demo implements Runnable {
     public static void main(String[] args) throws Exception {
         // Create an instance of Configs
         Configs configsInstance = new Configs();
-        long congif = Configs.getTempoAtualizacaoDoGrafico();
 
         Thread chartThread = new Thread(new Demo());
 

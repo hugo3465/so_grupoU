@@ -13,20 +13,28 @@ public class Configs {
      */
     private static final String fileName = "./Files/configs.txt";
 
+    /**
+     * Numeros de parametros que o ficheiro de configuração contém
+     */
+    private final static int QUANTIDADE_TAGS = 9;
+
     // Variveis com os nomes das tags do ficheiro configuracao (Parte inicial antes
     // do valor associado)
-    private final static int QUANTIDADE_TAGS = 7;
     private static final String tagTamanhoMem = "TamanhoMem:";
-    private static final String tagTempoMinimoTarefa = "TempoMinimoTarefa:";
-    private static final String tagTempoMaximoTarefa = "TempoMaximoTarefa:";
+    private static final String tagStressTestNumeroTarefas = "StressTestNumeroDeTarefas:";
+    private static final String tagStressTestTempoMinimoTarefa = "StressTestTempoMinimoTarefa:";
+    private static final String tagStressTestTTempoMaximoTarefa = "StressTestTempoMaximoTarefa:";
+    private static final String tagStressTempoEntreTarefas = "StressTempoEntreTarefas:";
     private static final String tagMensagemRespostaTarefa = "MensagemRespostaTarefa:";
     private static final String tagTempoEsperaAteProximaTarefa = "TempoEsperaAteProximaTarefa:";
     private static final String tagPeriodoVerificacaoTarefasEmExecucao = "PeriodoVerificacaoTarefasEmExecucao:";
     private static final String tagTempoAtualizacaoDoGrafico = "TempoAtualizacaoDoGrafico:";
 
     private static long tamanhoMem;
-    private static long tempoMinimoTarefa;
-    private static long tempoMaximoTarefa;
+    private static int numeroTarefasEmStress;
+    private static long tempoMinimoTarefaEmStress;
+    private static long tempoMaximoTarefaEmStress;
+    private static long tempoEntreTarefasEmStress;
     private static String mensagemRespostaTarefa;
     private static long tempoEsperaAteProximaTarefa;
     private static long periodoVerificacaoTarefasEmExecucao;
@@ -45,8 +53,10 @@ public class Configs {
      */
     private static void defaultValues() {
         tamanhoMem = 500;
-        tempoMinimoTarefa = 1000; // 1 segundo
-        tempoMaximoTarefa = 10000; // 10 segundos
+        numeroTarefasEmStress = 100;
+        tempoMinimoTarefaEmStress = 1000; // 1 segundo
+        tempoMaximoTarefaEmStress = 10000; // 10 segundos
+        tempoEntreTarefasEmStress = 200; // 200 milisegundos
         mensagemRespostaTarefa = "Mensagem de conclusão fictícia";
         tempoEsperaAteProximaTarefa = 500; // meio segundo
         periodoVerificacaoTarefasEmExecucao = 100; // 100 milisegundos
@@ -66,17 +76,21 @@ public class Configs {
             response = false;
         } else if (!data.get(0).contains(tagTamanhoMem)) {
             response = false;
-        } else if (!data.get(1).contains(tagTempoMinimoTarefa)) {
+        } else if (!data.get(1).contains(tagStressTestNumeroTarefas)) {
             response = false;
-        } else if (!data.get(2).contains(tagTempoMaximoTarefa)) {
+        } else if (!data.get(2).contains(tagStressTestTempoMinimoTarefa)) {
             response = false;
-        } else if (!data.get(3).contains(tagMensagemRespostaTarefa)) {
+        } else if (!data.get(3).contains(tagStressTestTTempoMaximoTarefa)) {
             response = false;
-        } else if (!data.get(4).contains(tagTempoEsperaAteProximaTarefa)) {
+        } else if (!data.get(4).contains(tagStressTempoEntreTarefas)) {
             response = false;
-        } else if (!data.get(5).contains(tagPeriodoVerificacaoTarefasEmExecucao)) {
+        } else if (!data.get(5).contains(tagMensagemRespostaTarefa)) {
             response = false;
-        } else if (!data.get(6).contains(tagTempoAtualizacaoDoGrafico)) {
+        } else if (!data.get(6).contains(tagTempoEsperaAteProximaTarefa)) {
+            response = false;
+        } else if (!data.get(7).contains(tagPeriodoVerificacaoTarefasEmExecucao)) {
+            response = false;
+        } else if (!data.get(8).contains(tagTempoAtualizacaoDoGrafico)) {
             response = false;
         }
 
@@ -94,14 +108,17 @@ public class Configs {
         if (isValidStructConfigFile(data)) {
             try {
                 tamanhoMem = Long.parseLong(data.get(0).split(tagTamanhoMem)[1].trim());
-                tempoMinimoTarefa = Long.parseLong(data.get(1).split(tagTempoMinimoTarefa)[1].trim());
-                tempoMaximoTarefa = Long.parseLong(data.get(2).split(tagTempoMaximoTarefa)[1].trim());
-                mensagemRespostaTarefa = data.get(3).split(tagMensagemRespostaTarefa)[1];
+                numeroTarefasEmStress =  Integer.parseInt(data.get(1).split(tagStressTestNumeroTarefas)[1].trim());
+                tempoMinimoTarefaEmStress = Long.parseLong(data.get(2).split(tagStressTestTempoMinimoTarefa)[1].trim());
+                tempoMaximoTarefaEmStress = Long
+                        .parseLong(data.get(3).split(tagStressTestTTempoMaximoTarefa)[1].trim());
+                tempoEntreTarefasEmStress = Long.parseLong(data.get(4).split(tagStressTempoEntreTarefas)[1].trim());
+                mensagemRespostaTarefa = data.get(5).split(tagMensagemRespostaTarefa)[1];
                 tempoEsperaAteProximaTarefa = Long
-                        .parseLong(data.get(4).split(tagTempoEsperaAteProximaTarefa)[1].trim());
+                        .parseLong(data.get(6).split(tagTempoEsperaAteProximaTarefa)[1].trim());
                 periodoVerificacaoTarefasEmExecucao = Long
-                        .parseLong(data.get(5).split(tagPeriodoVerificacaoTarefasEmExecucao)[1].trim());
-                tempoAtualizacaoDoGrafico = Long.parseLong(data.get(6).split(tagTempoAtualizacaoDoGrafico)[1].trim());
+                        .parseLong(data.get(7).split(tagPeriodoVerificacaoTarefasEmExecucao)[1].trim());
+                tempoAtualizacaoDoGrafico = Long.parseLong(data.get(8).split(tagTempoAtualizacaoDoGrafico)[1].trim());
                 return true;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -142,25 +159,43 @@ public class Configs {
     }
 
     /**
-     * Obtém o tempo mínimo de tarefa configurado.
+     * Obtém o numero de tarefas que irão ser executadas durante o teste de stress
+     * 
+     * @return número de tarefas a exeutar durante o teste de stress
+     */
+    public static int getNumeroTarefasNoTesteStress() {
+        return numeroTarefasEmStress;
+    }
+
+    /**
+     * Obtém o tempo mínimo da tarefa durante o stress test.
      *
      * @return O tempo mínimo de tarefa.
      */
     public static long getTempoMinimoTarefa() {
-        return tempoMinimoTarefa;
+        return tempoMinimoTarefaEmStress;
     }
 
     /**
-     * Obtém o tempo máximo de tarefa configurado.
+     * Obtém o tempo máximo da tarefa durante o stress test.
      *
      * @return O tempo máximo de tarefa.
      */
     public static long getTempoMaximoTarefa() {
-        return tempoMaximoTarefa;
+        return tempoMaximoTarefaEmStress;
     }
 
     /**
-     * Obtém a mensagem de resposta de tarefa configurada.
+     * Obtem o tempo entre o lançamento de tarefas durante o stress test
+     * 
+     * @return O tempo entre o lançamento de tarefas
+     */
+    public static long getTempoEntreTarefas() {
+        return tempoEntreTarefasEmStress;
+    }
+
+    /**
+     * Obtém a mensagem de resposta da tarefa configurada.
      *
      * @return A mensagem de resposta de tarefa.
      */
