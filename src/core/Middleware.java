@@ -20,7 +20,7 @@ public class Middleware {
         System.out.println("A enviar dados");
 
         try {
-            //semaphore.acquire();
+            semaphore.acquire();
             synchronized (kernel) {
                 kernel.receiveTask(task);
             }
@@ -39,7 +39,7 @@ public class Middleware {
     public void receive(Task taskThatAnswered, String response) {
         System.out.println("[" + taskThatAnswered.getName() + "] respondeu com: " + response);
 
-        //semaphore.release();
+        semaphore.release();
     }
 
     public void turnOnOperatingSystem() {
