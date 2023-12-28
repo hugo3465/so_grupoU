@@ -1,0 +1,9 @@
+TamanhoMem:500
+StressTestNumeroDeTarefas:100
+StressTestTempoMinimoTarefa:1000
+StressTestTempoMaximoTarefa:10000
+StressTempoEntreTarefas:200
+MensagemRespostaTarefa:Mensagem de conclusão fictícia
+TempoEsperaAteProximaTarefa:500
+PeriodoVerificacaoTarefasEmExecucao:100
+TempoAtualizacaoDoGrafico:200
