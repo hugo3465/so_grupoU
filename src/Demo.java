@@ -1,3 +1,12 @@
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.GregorianCalendar;
+
+import org.jfree.data.time.TimePeriod;
+
 import application.TaskBarChart;
 import application.TasksCircularChart;
 import core.Middleware;
@@ -18,62 +27,64 @@ public class Demo implements Runnable {
     }
 
     public static void main(String[] args) throws Exception {
-        // Create an instance of Configs
-        Configs configsInstance = new Configs();
 
-        Thread chartThread = new Thread(new Demo());
+        System.out.println(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        // // Create an instance of Configs
+        // Configs configsInstance = new Configs();
 
-        // Inicia o sistema operativo
-        middleware.turnOnOperatingSystem();
-        chartThread.start();
+        // Thread chartThread = new Thread(new Demo());
 
-        // Exemplo de adição de tarefas à CPU
-        Task task1 = new Task("task1", "Qualquer coisa", 40, TaskPriority.HIGH_PRIORITY,
-                generateRandomNumber(Configs.getTempoMinimoTarefa(), Configs.getTempoMaximoTarefa()));
-        Task task2 = new Task("task2", "Qualquer coisa", 12, TaskPriority.LOW_PRIORITY,
-                generateRandomNumber(Configs.getTempoMinimoTarefa(), Configs.getTempoMaximoTarefa()));
-        Task task3 = new Task("task3", "Qualquer coisa", 12, TaskPriority.LOW_PRIORITY,
-                generateRandomNumber(Configs.getTempoMinimoTarefa(), Configs.getTempoMaximoTarefa()));
-        Task task4 = new Task("task4", "Qualquer coisa", 12, TaskPriority.HIGH_PRIORITY,
-                generateRandomNumber(Configs.getTempoMinimoTarefa(), Configs.getTempoMaximoTarefa()));
+        // // Inicia o sistema operativo
+        // middleware.turnOnOperatingSystem();
+        // chartThread.start();
 
-        // adicionar estas tasks
-        middleware.send(task1);
-        middleware.send(task2);
-        middleware.send(task3);
-        middleware.send(task4);
+        // // Exemplo de adição de tarefas à CPU
+        // Task task1 = new Task("task1", "Qualquer coisa", 40, TaskPriority.HIGH_PRIORITY,
+        //         generateRandomNumber(Configs.getTempoMinimoTarefa(), Configs.getTempoMaximoTarefa()));
+        // Task task2 = new Task("task2", "Qualquer coisa", 12, TaskPriority.LOW_PRIORITY,
+        //         generateRandomNumber(Configs.getTempoMinimoTarefa(), Configs.getTempoMaximoTarefa()));
+        // Task task3 = new Task("task3", "Qualquer coisa", 12, TaskPriority.LOW_PRIORITY,
+        //         generateRandomNumber(Configs.getTempoMinimoTarefa(), Configs.getTempoMaximoTarefa()));
+        // Task task4 = new Task("task4", "Qualquer coisa", 12, TaskPriority.HIGH_PRIORITY,
+        //         generateRandomNumber(Configs.getTempoMinimoTarefa(), Configs.getTempoMaximoTarefa()));
 
-        Thread.sleep(1000);
+        // // adicionar estas tasks
+        // middleware.send(task1);
+        // middleware.send(task2);
+        // middleware.send(task3);
+        // middleware.send(task4);
 
-        // TODO TIRAR
-        int i = 0;
-        Task taskEx = null;
-        while (i < 100) {
-            switch (generateRandomNumber(0, 1)) {
-                case 0:
-                    taskEx = new Task("Auto generated" + i, "Auto Generated", 20, TaskPriority.HIGH_PRIORITY,
-                            generateRandomNumber(1000, 10000));
-                    break;
-                case 1:
-                    taskEx = new Task("Auto generated" + i, "Auto Generated", 20, TaskPriority.LOW_PRIORITY,
-                            generateRandomNumber(1000, 10000));
-                    break;
-                default:
-                    break;
-            }
-            i++;
-            middleware.send(taskEx);
-            System.out.println("\n" + i);
+        // Thread.sleep(1000);
 
-            Thread.sleep(100);
-        }
+        // // TODO TIRAR
+        // int i = 0;
+        // Task taskEx = null;
+        // while (i < 100) {
+        //     switch (generateRandomNumber(0, 1)) {
+        //         case 0:
+        //             taskEx = new Task("Auto generated" + i, "Auto Generated", 20, TaskPriority.HIGH_PRIORITY,
+        //                     generateRandomNumber(1000, 10000));
+        //             break;
+        //         case 1:
+        //             taskEx = new Task("Auto generated" + i, "Auto Generated", 20, TaskPriority.LOW_PRIORITY,
+        //                     generateRandomNumber(1000, 10000));
+        //             break;
+        //         default:
+        //             break;
+        //     }
+        //     i++;
+        //     middleware.send(taskEx);
+        //     System.out.println("\n" + i);
 
-        // Outras operações do sistema
-        // ...
+        //     Thread.sleep(100);
+        // }
 
-        // Termina o sistema operativo
-        System.out.println("\nA fazer shutdown");
-        middleware.turnOffOperatingSystem();
+        // // Outras operações do sistema
+        // // ...
+
+        // // Termina o sistema operativo
+        // System.out.println("\nA fazer shutdown");
+        // middleware.turnOffOperatingSystem();
     }
 
     @Override
