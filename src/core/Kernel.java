@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import exceptions.OutOfMemmoryException;
 import util.Configs;
+import util.Logs;
 import util.TaskScheduler;
 
 /**
@@ -91,13 +92,14 @@ public class Kernel {
         // só pode adicionar tarefas, se o CPU não estiver em processo de
         if (!isOnShutDownProcess) {
 
-            // TODO: Reservar a memória na MEM
             synchronized (waitingTasks) {
                 waitingTasks.add(task);
             }
 
             System.out.println("Tarefa agendada");
 
+            // escrever no log
+            Logs.writeTerraLog("Tarefa agendada");
         }
     }
 

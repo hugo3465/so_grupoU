@@ -1,16 +1,24 @@
 package core;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.concurrent.Semaphore;
+
+import application.App;
+import util.Logs;
 
 public class Middleware {
     private final int MIDDLEWARE_SIZE = 5;
 
+    private App application;
+    private Kernel kernel;
     // como o middleware só tem espaço 5, ent criou-se um semáforo para controlar
     // quem entra
     private Semaphore semaphore;
-    private Kernel kernel;
+    
 
-    public Middleware() {
+    public Middleware(App application) {
+        this.application = application;
         this.semaphore = new Semaphore(MIDDLEWARE_SIZE);
         this.kernel = new Kernel(this);
     }
@@ -24,7 +32,7 @@ public class Middleware {
             synchronized (kernel) {
                 kernel.receiveTask(task);
             }
-            
+
         } catch (Exception e) { // mudar para InterruptedException
             Thread.currentThread().interrupt();
         }
@@ -39,6 +47,11 @@ public class Middleware {
     public void receive(Task taskThatAnswered, String response) {
         System.out.println("[" + taskThatAnswered.getName() + "] respondeu com: " + response);
 
+        // escrever no log
+        Logs.writeTerraLog("[" + taskThatAnswered.getName() + "] respondeu com: " + response);
+
+        application.receiveTask(taskThatAnswered, response);
+        
         semaphore.release();
     }
 
@@ -46,12 +59,20 @@ public class Middleware {
         System.out.println("A iniciar o Sistema Operativo...");
         kernel.start();
         System.out.println("Ligado");
+
+        // escrever no log
+        Logs.writeSateliteLog("Ligado em: " +
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
     }
 
     public void turnOffOperatingSystem() {
         System.out.println("A encerrar o Sistema Operativo...");
         kernel.shutdown();
         System.out.println("Encerrado");
+
+        // escrever no log
+        Logs.writeSateliteLog("Desligado em: " +
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
     }
 
     public int getNumberOfWaitingTasks() {
