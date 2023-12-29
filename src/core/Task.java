@@ -1,6 +1,8 @@
 package core;
 
 import enums.TaskPriority;
+import util.Configs;
+import util.Logs;
 
 /**
  * Representa uma tarefa a ser executada pelo sistema operativo.
@@ -70,13 +72,17 @@ public class Task implements Runnable {
     @Override
     public void run() {
         try {
+            // escrever na consola
             System.out.println("Tarefa " + name + " a executar");
             System.out.println("[" + name + "]: " + msg);
+
+            // escrever no log
+            Logs.writeSateliteLog("Tarefa " + name + " a executar");
 
             Thread.sleep(expectedTime);
 
             // Tarefa concluída, avisa a CPU
-            cpu.taskCompleted(this, "Mensagem de conclusão fictícia");
+            cpu.taskCompleted(this, Configs.getMensagemRespostaTarefa());
 
             // Notify waiting threads (if any)
             notifyExecutionComplete();

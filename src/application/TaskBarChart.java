@@ -1,3 +1,4 @@
+package application;
 import javax.swing.JFrame;
 
 import org.jfree.chart.ChartFactory;
@@ -78,6 +79,13 @@ public class TaskBarChart extends JFrame {
 
         // // Repinta o painel do gráfico
         // ((ChartPanel) getContentPane().getComponent(0)).repaint();
+    }
+
+    /**
+     * Fecha a janela do gráfico.
+     */
+    public void close() {
+        this.dispose();
     }
 
 }

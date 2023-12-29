@@ -1,6 +1,7 @@
 package core;
 
 import exceptions.OutOfMemmoryException;
+import util.Configs;
 
 /**
  * unidade de processamento
@@ -55,8 +56,8 @@ public class CPU implements Runnable {
                                 kernel.waitingTasks.add(currentTask);
                             }
                         } finally {
-                            // espera 500 milisegundos até executar a próxima tarefa da fila
-                            Thread.sleep(500);
+                            // espera o tempo pré-definido no ficheiro até executar a próxima tarefa da fila
+                            Thread.sleep(Configs.getTempoEsperaAteProximaTarefa());
                         }
 
                     }
