@@ -11,7 +11,7 @@
 .mtj.tmp/
 
 # Logs
-pcLog.txt
+terra.txt
 sateliteLog.txt
 
 # Package Files #

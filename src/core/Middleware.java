@@ -4,17 +4,21 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.Semaphore;
 
+import application.App;
 import util.Logs;
 
 public class Middleware {
     private final int MIDDLEWARE_SIZE = 5;
 
+    private App application;
+    private Kernel kernel;
     // como o middleware só tem espaço 5, ent criou-se um semáforo para controlar
     // quem entra
     private Semaphore semaphore;
-    private Kernel kernel;
+    
 
-    public Middleware() {
+    public Middleware(App application) {
+        this.application = application;
         this.semaphore = new Semaphore(MIDDLEWARE_SIZE);
         this.kernel = new Kernel(this);
     }
@@ -44,8 +48,10 @@ public class Middleware {
         System.out.println("[" + taskThatAnswered.getName() + "] respondeu com: " + response);
 
         // escrever no log
-        Logs.writePcLog("[" + taskThatAnswered.getName() + "] respondeu com: " + response);
+        Logs.writeTerraLog("[" + taskThatAnswered.getName() + "] respondeu com: " + response);
 
+        application.receiveTask(taskThatAnswered, response);
+        
         semaphore.release();
     }
 

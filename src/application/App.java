@@ -10,13 +10,14 @@ import util.Random;
 public class App extends javax.swing.JFrame {
         private Middleware middleware;
         private Thread charts;
+        private MessageInterface earthFrame;
 
         /**
          * Creates new form Interface
          */
         public App() {
                 initComponents();
-                this.middleware = new Middleware();
+                this.middleware = new Middleware(this);
 
                 // importar os valores do ficheiro de configuração
                 Configs.importConfig();
@@ -321,9 +322,14 @@ public class App extends javax.swing.JFrame {
                 GenerateTask.setEnabled(true);
                 StressTest.setEnabled(true);
 
+                // criar frames para o satélite e para a terra
+                earthFrame = new MessageInterface("Terra");
+
+                // criar os gráficos
                 this.charts = new Thread(new ChartsThread(middleware));
                 this.charts.start();
 
+                // lgar o sistema operativo
                 middleware.turnOnOperatingSystem();
 
         }// GEN-LAST:event_PowerOnActionPerformed
@@ -335,8 +341,12 @@ public class App extends javax.swing.JFrame {
                 GenerateTask.setEnabled(false);
                 StressTest.setEnabled(false);
 
+                // desligar o sistema operarivo
                 middleware.turnOffOperatingSystem();
-                // this.charts.interrupt(); // TODO pode dar erro aqui
+
+                // fechar as interfaces
+                earthFrame.close();
+
         }// GEN-LAST:event_PowerOffActionPerformed
 
         private void GenerateTaskActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_GenerateTaskActionPerformed
@@ -351,9 +361,11 @@ public class App extends javax.swing.JFrame {
 
                                 if (name != null && message != null) {
                                         Task task = new Task(name, message, memmory, priority, expectedTime);
-                                        middleware.send(task);
-                                }
 
+                                        middleware.send(task);
+
+                                        earthFrame.addText("Tarefa agendada");
+                                }
                         } catch (Exception e) {
                                 // TODO: handle exception
                         }
@@ -364,14 +376,15 @@ public class App extends javax.swing.JFrame {
         private void StressTestActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_StressTestActionPerformed
                 // só gera a tarefa, se o sistema operativo estiver ligado
                 if (!PowerOn.isEnabled()) {
+                        earthFrame.addText("Realização de um Stress Test");
                         // é preciso esta thread, pois, sem ela o stress test ia monopolizar toda a
                         // interface, e não seria possível executar mais nada enquanto estivesse a
                         // lançar tarefas
+
                         Thread stressTest = new Thread(() -> {
                                 executeStressTest();
                         });
                         stressTest.start();
-
                 }
 
         }// GEN-LAST:event_StressTestActionPerformed
@@ -441,6 +454,8 @@ public class App extends javax.swing.JFrame {
 
                         middleware.send(taskEx);
 
+                        earthFrame.addText("Tarefa agendada");
+
                         try {
                                 Thread.sleep(timeBetweenTasks);
                         } catch (InterruptedException e) {
@@ -448,6 +463,10 @@ public class App extends javax.swing.JFrame {
                                 e.printStackTrace();
                         }
                 }
+        }
+
+        public void receiveTask(Task task, String response) {
+                earthFrame.addText("[" + task.getName() + "] respondeu com: " + response);
         }
 
         /**

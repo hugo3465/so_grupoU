@@ -99,7 +99,7 @@ public class Kernel {
             System.out.println("Tarefa agendada");
 
             // escrever no log
-            Logs.writePcLog("Tarefa agendada");
+            Logs.writeTerraLog("Tarefa agendada");
         }
     }
 
