@@ -66,7 +66,7 @@ public class CPU implements Runnable {
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            e.printStackTrace(); // TODO apagar estes printStackTraces
+            e.printStackTrace();
         }
 
     }
