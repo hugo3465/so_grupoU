@@ -1,4 +1,5 @@
 package application;
+
 import javax.swing.JFrame;
 
 import org.jfree.chart.ChartFactory;
@@ -7,20 +8,16 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 
-/**
- * Representa um gráfico de barras para visualizar a quantidade de tarefas em diferentes estados.
- */
-public class TaskBarChart extends JFrame {
-
+public class MemoryBarChart extends JFrame{
     private JFreeChart chart;
     private DefaultCategoryDataset dataset;
 
     /**
-     * Construtor da classe TaskBarChart.
+     * Construtor da classe MemmoryChart.
      *
      * @param title Título do gráfico.
      */
-    public TaskBarChart(String title) {
+    public MemoryBarChart(String title) {
         super(title);
 
         // Cria um conjunto de dados inicial
@@ -29,10 +26,10 @@ public class TaskBarChart extends JFrame {
         // Cria um gráfico com base no conjunto de dados
         chart = ChartFactory.createBarChart(
                 title,
-                "Tasks",
-                "Quantity",
+                "",
+                "",
                 dataset,
-                PlotOrientation.VERTICAL,
+                PlotOrientation.HORIZONTAL,
                 false,
                 false,
                 false
@@ -57,28 +54,28 @@ public class TaskBarChart extends JFrame {
      */
     private DefaultCategoryDataset createDataset() {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-        dataset.addValue(0, "", "Waiting");
-        dataset.addValue(0, "", "Executing");
+        dataset.addValue(0, "", "");
         return dataset;
     }
 
     /**
-     * Atualiza o conjunto de dados com novos valores para tarefas em diferentes estados.
+     * Atualiza o conjunto de dados com novos valores para tarefas em diferentes
+     * estados.
      *
      * @param waitingTasks   Quantidade de tarefas em espera.
      * @param executingTasks Quantidade de tarefas em execução.
      */
-    public void updateDataset(int waitingTasks, int executingTasks) {
-        // Atualiza os valores no conjunto de dados (substitua esta lógica conforme necessário)
-        dataset.setValue(waitingTasks, "", "Waiting");
-        dataset.setValue(executingTasks, "", "Executing");
+    public void updateDataset(int ammountOfMemmory) {
+        // Atualiza os valores no conjunto de dados (substitua esta lógica conforme
+        // necessário)
+        dataset.setValue(ammountOfMemmory, "", "");
 
         // Notifica o gráfico de que o conjunto de dados foi alterado
-        // JFreeChart chart = ((ChartPanel) getContentPane().getComponent(0)).getChart();
+        // JFreeChart chart = ((ChartPanel)
+        // getContentPane().getComponent(0)).getChart();
         // chart.fireChartChanged();
 
-        // // Repinta o painel do gráfico
-        // ((ChartPanel) getContentPane().getComponent(0)).repaint();
+        // Repinta o painel do gráfico
         repaint();
     }
 
@@ -88,5 +85,4 @@ public class TaskBarChart extends JFrame {
     public void close() {
         this.dispose();
     }
-
 }

@@ -90,4 +90,8 @@ public class Middleware {
     public boolean isOperational() {
         return kernel.isOn();
     }
+
+    public int getMemoryOnUsage() {
+        return kernel.getMemoryOnUsage();
+    }
 }

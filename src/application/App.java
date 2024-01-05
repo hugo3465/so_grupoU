@@ -96,7 +96,7 @@ public class App extends javax.swing.JFrame {
                 StressTest.setEnabled(false);
                 StressTest.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                StressTestActionPerformed(evt);
+                                stressTestActionPerformed(evt);
                         }
                 });
 
@@ -378,7 +378,7 @@ public class App extends javax.swing.JFrame {
 
         }// GEN-LAST:event_GenerateTaskActionPerformed
 
-        private void StressTestActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_StressTestActionPerformed
+        private void stressTestActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_StressTestActionPerformed
                 // só gera a tarefa, se o sistema operativo estiver ligado
                 if (!PowerOn.isEnabled()) {
                         earthFrame.addText("Realização de um Stress Test");

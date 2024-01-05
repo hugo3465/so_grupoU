@@ -1,6 +1,7 @@
 package core;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import exceptions.OutOfMemmoryException;
 import util.Configs;
@@ -30,13 +31,13 @@ public class Kernel {
     // elemento que está na fila há mais tempo.
     protected TaskScheduler waitingTasks;
 
-    protected ArrayList<Task> tasksOnExecution;
+    protected List<Task> tasksOnExecution;
 
     /**
      * Array que contém todas as tarefas que acabaram de ser executadas pelo sistema
      * operativo.
      */
-    protected ArrayList<Task> tasksTerminated;
+    protected List<Task> tasksTerminated;
 
     /**
      * Indica se o sistema operativo está ligado ou não
@@ -90,7 +91,7 @@ public class Kernel {
     // acho que podia nem estar syncronized este
     protected synchronized void receiveTask(Task task) {
         // só pode adicionar tarefas, se o CPU não estiver em processo de encerramento
-        if (!isOnShutDownProcess) {
+        if (!isOnShutDownProcess && isOn) {
 
             synchronized (waitingTasks) {
                 waitingTasks.add(task);
@@ -138,6 +139,10 @@ public class Kernel {
         // sistema operativo
         this.isOn = false;
         this.isOnShutDownProcess = false;
+    }
+
+    public int getMemoryOnUsage() {
+        return mem.getUsedMemory();
     }
 
     public synchronized void reserveMemory(int memoryToReserve) throws OutOfMemmoryException {
