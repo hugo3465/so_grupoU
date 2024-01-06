@@ -1,24 +1,37 @@
-import java.util.Iterator;
-
-import util.Buffer;
+import core.Middleware;
+import core.Task;
+import enums.TaskPriority;
 
 public class Demo {
     public static void main(String[] args) {
-        Buffer<Integer> buffer = new Buffer<>(5);
-        buffer.addFront(5);
-        buffer.addFront(2);
-        buffer.addRear(4);
-        buffer.addRear(4);
-        buffer.addRear(3);
-        buffer.removeFront();
-        buffer.removeRear();
-        buffer.removeFront();
+        // Middleware middleware = new Middleware();
+        // middleware.turnOnOperatingSystem();
 
-        
+        Task task1 = new Task("Teste", "Teste1", 5, TaskPriority.HIGH_PRIORITY, 1000);
 
-        Iterator<Integer> iterador = buffer.iterator();
-        while (iterador.hasNext()) {
-            System.out.println(iterador.next());
+        System.out.println(task1.getResponse());
+
+        Thread thread = new Thread(task1);
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
+       System.out.println(task1.getResponse()); 
+        // middleware.send(task1);
+
+        // try {
+        //     Thread.sleep(5000);
+        // } catch (InterruptedException e) {
+        //     // TODO Auto-generated catch block
+        //     e.printStackTrace();
+        // }
+
+
+        // Task responsedTask = middleware.receive();
+        // System.out.println(responsedTask.getResponse());
+        
     }
 }

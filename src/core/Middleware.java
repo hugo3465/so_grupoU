@@ -14,16 +14,28 @@ public class Middleware {
     private final int MIDDLEWARE_BUFFER_RECEIVE_SIZE = 2;
     private final int MIDDLEWARE_SIZE = MIDDLEWARE_BUFFER_SEND_SIZE + MIDDLEWARE_BUFFER_RECEIVE_SIZE;
 
-    private App application;
     private Kernel kernel;
-    // como o middleware só tem espaço 5, ent criou-se um semáforo para controlar
-    // quem entra
-    private Semaphore sendSemaphore;
-    private Semaphore receiveSemaphore;
-    private Buffer<Task> buffer;
 
-    public Middleware(App application) {
-        this.application = application;
+    /**
+     * Estrutura de dadsos que controla a leitura e a escrita de tasks, tem um
+     * espaço de 5 unidades, sendo 3 delas para enviar as tasks apra o kernel, e 2
+     * para enviar para a aplicação
+     */
+    protected Buffer<Task> buffer;
+
+    /**
+     * Semáforo que controla a escrita no buffer, só pode ter 3 tasks para enviar
+     * para o kernel no buffer
+     */
+    protected Semaphore sendSemaphore;
+
+    /**
+     * Semáforo que controla a leitura no buffer, só pode ter 2 tasks para enviar
+     * para a aplicação no buffer
+     */
+    protected Semaphore receiveSemaphore;
+
+    public Middleware() {
         this.kernel = new Kernel(this);
 
         this.sendSemaphore = new Semaphore(MIDDLEWARE_BUFFER_SEND_SIZE);
@@ -37,13 +49,20 @@ public class Middleware {
 
         try {
             sendSemaphore.acquire();
-            // synchronized (kernel) {
-            //     kernel.receiveTask(task);
-            // }
 
-            synchronized(buffer) {
-
+            // quando uma taské colocada no buffer, é colocada sempre na frente
+            synchronized (buffer) {
+                buffer.addFront(task);
             }
+
+            Task taskToSendToKernel = null;
+            synchronized (buffer) {
+                taskToSendToKernel = buffer.removeFront();
+            }
+
+            kernel.receiveTask(taskToSendToKernel);
+
+            sendSemaphore.release();
 
         } catch (Exception e) { // mudar para InterruptedException
             Thread.currentThread().interrupt();
@@ -53,18 +72,30 @@ public class Middleware {
     /**
      * Método para receber dados da estação para o satélite
      * 
-     * @param taskThatAnswered identificador de qual task respondeu
-     * @param response         resposta que a task deu
      */
-    public void receive(Task taskThatAnswered, String response) {
-        System.out.println("[" + taskThatAnswered.getName() + "] respondeu com: " + response);
+    public synchronized Task receive() {
+
+        Task answeredTask;
+        synchronized (buffer) {
+            answeredTask = buffer.removeRear();
+        }
+
+        // caso não haja nehuma Task no buffer para receber, retorna null
+        if (answeredTask == null) {
+            return null;
+        }
+
+        String taskName = answeredTask.getName();
+        String taskResponse = answeredTask.getResponse();
+
+        System.out.println("[" + taskName + "] respondeu com: " + taskResponse);
 
         // escrever no log
-        Logs.writeTerraLog("[" + taskThatAnswered.getName() + "] respondeu com: " + response);
+        Logs.writeTerraLog("[" + taskName + "] respondeu com: " + taskResponse);
 
-        application.receiveTask(taskThatAnswered, response);
+        receiveSemaphore.release();
 
-        semaphore.release();
+        return answeredTask;
     }
 
     public void turnOnOperatingSystem() {

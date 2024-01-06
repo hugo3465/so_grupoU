@@ -42,6 +42,13 @@ public class Task implements Runnable {
     private int expectedTime;
 
     /**
+     * Resposta que a terefa vai daar quanod for executada.
+     * É sempre iniciada a null, e só quando executada é que lhe é colocado alguma
+     * coisa
+     */
+    private String response;
+
+    /**
      * Construtor da classe Task.
      *
      * @param name         Nome da tarefa.
@@ -57,6 +64,7 @@ public class Task implements Runnable {
         this.memory = memory;
         this.priority = priority;
         this.expectedTime = expectedTime;
+        this.response = null;
     }
 
     /**
@@ -81,11 +89,10 @@ public class Task implements Runnable {
 
             Thread.sleep(expectedTime);
 
-            // Tarefa concluída, avisa a CPU
-            cpu.taskCompleted(this, Configs.getMensagemRespostaTarefa());
+            this.response = Configs.getMensagemRespostaTarefa();
 
-            // Notify waiting threads (if any)
-            notifyExecutionComplete();
+            // Tarefa concluída, avisa a CPU
+            cpu.taskCompleted(this);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             e.printStackTrace();
@@ -132,12 +139,7 @@ public class Task implements Runnable {
         return memory;
     }
 
-    // para já estas dois métodos ainda não servem para nada
-    public synchronized void waitForExecution() throws InterruptedException {
-        wait();
-    }
-
-    public synchronized void notifyExecutionComplete() {
-        notify();
+    public String getResponse() {
+        return response;
     }
 }

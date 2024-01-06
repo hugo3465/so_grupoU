@@ -1,12 +1,17 @@
 package application;
 
+import java.io.ObjectInputFilter.Config;
+
 import javax.swing.JFrame;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
+
+import util.Configs;
 
 public class MemoryBarChart extends JFrame{
     private JFreeChart chart;
@@ -37,8 +42,15 @@ public class MemoryBarChart extends JFrame{
 
         // Cria um painel para exibir o gráfico
         ChartPanel chartPanel = new ChartPanel(chart);
-        chartPanel.setPreferredSize(new java.awt.Dimension(500, 350));
+        chartPanel.setPreferredSize(new java.awt.Dimension(300, 150));
         this.setLocation(500, 500);
+
+        // Obtém o eixo do gráfico
+        NumberAxis rangeAxis = (NumberAxis) chart.getCategoryPlot().getRangeAxis();
+
+        // Define o valor máximo para o eixo (mude conforme necessário)
+        long maxValue = Configs.getTamanhoMem(); // Example: set the maximum value to 100
+        rangeAxis.setRange(0, maxValue);
 
         // Configura o JFrame
         setContentPane(chartPanel);
