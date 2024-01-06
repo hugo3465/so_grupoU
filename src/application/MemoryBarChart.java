@@ -1,7 +1,5 @@
 package application;
 
-import java.io.ObjectInputFilter.Config;
-
 import javax.swing.JFrame;
 
 import org.jfree.chart.ChartFactory;
@@ -42,7 +40,7 @@ public class MemoryBarChart extends JFrame{
 
         // Cria um painel para exibir o gráfico
         ChartPanel chartPanel = new ChartPanel(chart);
-        chartPanel.setPreferredSize(new java.awt.Dimension(300, 150));
+        chartPanel.setPreferredSize(new java.awt.Dimension(300, 165));
         this.setLocation(500, 500);
 
         // Obtém o eixo do gráfico

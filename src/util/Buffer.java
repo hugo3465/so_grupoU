@@ -2,7 +2,6 @@ package util;
 
 import java.util.Iterator;
 
-import exceptions.EmptyCollectionException;
 import exceptions.FullBufferException;
 
 public class Buffer<T> implements Iterable<T> {

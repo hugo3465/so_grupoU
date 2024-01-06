@@ -12,7 +12,7 @@ import java.awt.Dimension;
  */
 public class TasksCircularChart extends JFrame {
     private JFreeChart chart;
-    private DefaultPieDataset dataset;
+    private DefaultPieDataset<String> dataset;
 
     /**
      * Construtor da classe TasksCircularChart.
@@ -49,8 +49,8 @@ public class TasksCircularChart extends JFrame {
      *
      * @return O conjunto de dados inicial.
      */
-    private DefaultPieDataset createDataset() {
-        DefaultPieDataset dataset = new DefaultPieDataset();
+    private DefaultPieDataset<String> createDataset() {
+        DefaultPieDataset<String> dataset = new DefaultPieDataset<>();
         dataset.setValue("Waiting", 0);
         dataset.setValue("Executing", 0);
         dataset.setValue("Finished", 0);
