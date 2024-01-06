@@ -18,7 +18,7 @@ public class App extends javax.swing.JFrame {
          */
         public App() {
                 initComponents();
-                this.middleware = new Middleware(this);
+                this.middleware = new Middleware();
 
                 // importar os valores do ficheiro de configuração
                 Configs.importConfig();
@@ -315,9 +315,9 @@ public class App extends javax.swing.JFrame {
         }// </editor-fold>//GEN-END:initComponents
 
         private void PowerOnActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_PowerOnActionPerformed
+                // Estética dos botões
                 PowerOn.setEnabled(false);
                 PowerOff.setEnabled(true);
-
                 GenerateTask.setEnabled(true);
                 StressTest.setEnabled(true);
 
@@ -330,6 +330,21 @@ public class App extends javax.swing.JFrame {
 
                 // lgar o sistema operativo
                 middleware.turnOnOperatingSystem();
+
+                // Enquanto que o sistema operativo estivver ligado, vai estar sempre a executar
+                // o receive()., se tiver algo lá dentro, coloca dentro do earthFrame
+                Thread receiverThread = new Thread(() -> {
+                        // vai executar enquanto que o sistema operativo estiver ligado
+                        while (!PowerOn.isEnabled()) {
+                                Task receiverTask;
+                                receiverTask = middleware.receive();
+                                if (receiverTask != null) {
+                                        earthFrame.addText("[" + receiverTask.getName() + "] respondeu com: "
+                                                        + receiverTask.getResponse());
+                                }
+                        }
+                });
+                receiverThread.start();
 
         }// GEN-LAST:event_PowerOnActionPerformed
 
@@ -378,22 +393,6 @@ public class App extends javax.swing.JFrame {
 
         }// GEN-LAST:event_GenerateTaskActionPerformed
 
-        private void stressTestActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_StressTestActionPerformed
-                // só gera a tarefa, se o sistema operativo estiver ligado
-                if (!PowerOn.isEnabled()) {
-                        earthFrame.addText("Realização de um Stress Test");
-                        // é preciso esta thread, pois, sem ela o stress test ia monopolizar toda a
-                        // interface, e não seria possível executar mais nada enquanto estivesse a
-                        // lançar tarefas
-
-                        this.stressTestThread = new Thread(() -> {
-                                executeStressTest();
-                        });
-                        stressTestThread.start();
-                }
-
-        }// GEN-LAST:event_StressTestActionPerformed
-
         private int getExpectedTime() {
                 int memmory = 0;
                 switch (taskExpectedTime.getSelectedItem()) {
@@ -428,6 +427,22 @@ public class App extends javax.swing.JFrame {
 
                 return priority;
         }
+
+        private void stressTestActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_StressTestActionPerformed
+                // só gera a tarefa, se o sistema operativo estiver ligado
+                if (!PowerOn.isEnabled()) {
+                        earthFrame.addText("Realização de um Stress Test");
+                        // é preciso esta thread, pois, sem ela o stress test ia monopolizar toda a
+                        // interface, e não seria possível executar mais nada enquanto estivesse a
+                        // lançar tarefas
+
+                        this.stressTestThread = new Thread(() -> {
+                                executeStressTest();
+                        });
+                        stressTestThread.start();
+                }
+
+        }// GEN-LAST:event_StressTestActionPerformed
 
         /**
          * Vai lançar o número de thread pré-definidas no ficheiro de configuração
@@ -468,10 +483,6 @@ public class App extends javax.swing.JFrame {
                                 break;
                         }
                 }
-        }
-
-        public void receiveTask(Task task, String response) {
-                earthFrame.addText("[" + task.getName() + "] respondeu com: " + response);
         }
 
         /**

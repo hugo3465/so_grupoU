@@ -71,7 +71,8 @@ public class Kernel {
         cpuThread = new Thread(cpu);
         cpuThread.start();
 
-        // TODO: testes, vários núcleos. Para apagar, APENAS TESTES PARA AUMENTAR VELOCIDADE
+        // TODO: testes, vários núcleos. Para apagar, APENAS TESTES PARA AUMENTAR
+        // VELOCIDADE
         // Thread nucleo2 = new Thread(cpu);
         // nucleo2.start();
         // Thread nucleo3 = new Thread(cpu);
@@ -104,10 +105,19 @@ public class Kernel {
         }
     }
 
-    protected void sendTask(Task task, String response) {
-        middleware.receive(task, response);
+    protected void sendToMiddleware(Task task) {
+        try {
+            middleware.receiveSemaphore.acquire();
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
         mem.deallocateMemmory(task.getMemory());
+
+        synchronized (middleware.buffer) {
+            middleware.buffer.addRear(task);
+        }
     }
 
     // encerramento dos sub-componentes e outras coisas
