@@ -2,25 +2,33 @@ package core;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.Semaphore;
 
 import application.App;
 import util.Logs;
+import util.Buffer;
 
 public class Middleware {
-    private final int MIDDLEWARE_SIZE = 5;
+    private final int MIDDLEWARE_BUFFER_SEND_SIZE = 3;
+    private final int MIDDLEWARE_BUFFER_RECEIVE_SIZE = 2;
+    private final int MIDDLEWARE_SIZE = MIDDLEWARE_BUFFER_SEND_SIZE + MIDDLEWARE_BUFFER_RECEIVE_SIZE;
 
     private App application;
     private Kernel kernel;
     // como o middleware só tem espaço 5, ent criou-se um semáforo para controlar
     // quem entra
-    private Semaphore semaphore;
-    
+    private Semaphore sendSemaphore;
+    private Semaphore receiveSemaphore;
+    private Buffer<Task> buffer;
 
     public Middleware(App application) {
         this.application = application;
-        this.semaphore = new Semaphore(MIDDLEWARE_SIZE);
         this.kernel = new Kernel(this);
+
+        this.sendSemaphore = new Semaphore(MIDDLEWARE_BUFFER_SEND_SIZE);
+        this.receiveSemaphore = new Semaphore(MIDDLEWARE_BUFFER_RECEIVE_SIZE);
+        this.buffer = new Buffer<>(MIDDLEWARE_SIZE);
     }
 
     // Método para enviar dados do satélite para a estação
@@ -28,9 +36,13 @@ public class Middleware {
         System.out.println("A enviar dados");
 
         try {
-            semaphore.acquire();
-            synchronized (kernel) {
-                kernel.receiveTask(task);
+            sendSemaphore.acquire();
+            // synchronized (kernel) {
+            //     kernel.receiveTask(task);
+            // }
+
+            synchronized(buffer) {
+
             }
 
         } catch (Exception e) { // mudar para InterruptedException
@@ -51,7 +63,7 @@ public class Middleware {
         Logs.writeTerraLog("[" + taskThatAnswered.getName() + "] respondeu com: " + response);
 
         application.receiveTask(taskThatAnswered, response);
-        
+
         semaphore.release();
     }
 
