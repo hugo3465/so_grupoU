@@ -66,12 +66,12 @@ public class CPU implements Runnable {
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            e.printStackTrace(); // TODO apagar estes printStackTraces
+            e.printStackTrace();
         }
 
     }
 
-    protected synchronized void taskCompleted(Task task, String response) {
+    protected synchronized void taskCompleted(Task task) {
 
         synchronized (kernel.tasksOnExecution) {
             kernel.tasksOnExecution.remove(task);
@@ -82,7 +82,7 @@ public class CPU implements Runnable {
         }
 
         // manda a tarefa para o kernel, que por sua vez manda para o middleware
-        kernel.sendTask(task, response);
+        kernel.sendToMiddleware(task);
 
     }
 }

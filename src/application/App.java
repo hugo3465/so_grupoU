@@ -11,13 +11,14 @@ public class App extends javax.swing.JFrame {
         private Middleware middleware;
         private Thread charts;
         private MessageInterface earthFrame;
+        private Thread stressTestThread;
 
         /**
          * Creates new form Interface
          */
         public App() {
                 initComponents();
-                this.middleware = new Middleware(this);
+                this.middleware = new Middleware();
 
                 // importar os valores do ficheiro de configuração
                 Configs.importConfig();
@@ -33,8 +34,6 @@ public class App extends javax.swing.JFrame {
         // Code">//GEN-BEGIN:initComponents
         private void initComponents() {
 
-                jFileChooser1 = new javax.swing.JFileChooser();
-                buttonGroup1 = new javax.swing.ButtonGroup();
                 jCheckBoxMenuItem1 = new javax.swing.JCheckBoxMenuItem();
                 PowerOn = new javax.swing.JButton();
                 PowerOff = new javax.swing.JButton();
@@ -97,7 +96,7 @@ public class App extends javax.swing.JFrame {
                 StressTest.setEnabled(false);
                 StressTest.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                StressTestActionPerformed(evt);
+                                stressTestActionPerformed(evt);
                         }
                 });
 
@@ -316,9 +315,9 @@ public class App extends javax.swing.JFrame {
         }// </editor-fold>//GEN-END:initComponents
 
         private void PowerOnActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_PowerOnActionPerformed
+                // Estética dos botões
                 PowerOn.setEnabled(false);
                 PowerOff.setEnabled(true);
-
                 GenerateTask.setEnabled(true);
                 StressTest.setEnabled(true);
 
@@ -332,6 +331,21 @@ public class App extends javax.swing.JFrame {
                 // lgar o sistema operativo
                 middleware.turnOnOperatingSystem();
 
+                // Enquanto que o sistema operativo estivver ligado, vai estar sempre a executar
+                // o receive()., se tiver algo lá dentro, coloca dentro do earthFrame
+                Thread receiverThread = new Thread(() -> {
+                        // vai executar enquanto que o sistema operativo estiver ligado
+                        while (!PowerOn.isEnabled()) {
+                                Task receiverTask;
+                                receiverTask = middleware.receive();
+                                if (receiverTask != null) {
+                                        earthFrame.addText("[" + receiverTask.getName() + "] respondeu com: "
+                                                        + receiverTask.getResponse());
+                                }
+                        }
+                });
+                receiverThread.start();
+
         }// GEN-LAST:event_PowerOnActionPerformed
 
         private void PowerOffActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_PowerOffActionPerformed
@@ -340,6 +354,12 @@ public class App extends javax.swing.JFrame {
 
                 GenerateTask.setEnabled(false);
                 StressTest.setEnabled(false);
+
+                // Interrompe a Thread stressTest se estiver ativa
+                if (stressTestThread != null && stressTestThread.isAlive()) {
+                        stressTestThread.interrupt();
+                        System.out.println("ESTAVA LIGADA");
+                }
 
                 // desligar o sistema operarivo
                 middleware.turnOffOperatingSystem();
@@ -367,27 +387,11 @@ public class App extends javax.swing.JFrame {
                                         earthFrame.addText("Tarefa agendada");
                                 }
                         } catch (Exception e) {
-                                // TODO: handle exception
+                                e.printStackTrace();
                         }
                 }
 
         }// GEN-LAST:event_GenerateTaskActionPerformed
-
-        private void StressTestActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_StressTestActionPerformed
-                // só gera a tarefa, se o sistema operativo estiver ligado
-                if (!PowerOn.isEnabled()) {
-                        earthFrame.addText("Realização de um Stress Test");
-                        // é preciso esta thread, pois, sem ela o stress test ia monopolizar toda a
-                        // interface, e não seria possível executar mais nada enquanto estivesse a
-                        // lançar tarefas
-
-                        Thread stressTest = new Thread(() -> {
-                                executeStressTest();
-                        });
-                        stressTest.start();
-                }
-
-        }// GEN-LAST:event_StressTestActionPerformed
 
         private int getExpectedTime() {
                 int memmory = 0;
@@ -424,6 +428,22 @@ public class App extends javax.swing.JFrame {
                 return priority;
         }
 
+        private void stressTestActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_StressTestActionPerformed
+                // só gera a tarefa, se o sistema operativo estiver ligado
+                if (!PowerOn.isEnabled()) {
+                        earthFrame.addText("Realização de um Stress Test");
+                        // é preciso esta thread, pois, sem ela o stress test ia monopolizar toda a
+                        // interface, e não seria possível executar mais nada enquanto estivesse a
+                        // lançar tarefas
+
+                        this.stressTestThread = new Thread(() -> {
+                                executeStressTest();
+                        });
+                        stressTestThread.start();
+                }
+
+        }// GEN-LAST:event_StressTestActionPerformed
+
         /**
          * Vai lançar o número de thread pré-definidas no ficheiro de configuração
          */
@@ -459,14 +479,10 @@ public class App extends javax.swing.JFrame {
                         try {
                                 Thread.sleep(timeBetweenTasks);
                         } catch (InterruptedException e) {
-                                // TODO Auto-generated catch block
-                                e.printStackTrace();
+                                // Trata a exceção ou simplesmente sai do loop
+                                break;
                         }
                 }
-        }
-
-        public void receiveTask(Task task, String response) {
-                earthFrame.addText("[" + task.getName() + "] respondeu com: " + response);
         }
 
         /**
@@ -518,9 +534,7 @@ public class App extends javax.swing.JFrame {
         private javax.swing.JButton PowerOff;
         private javax.swing.JButton PowerOn;
         private javax.swing.JButton StressTest;
-        private javax.swing.ButtonGroup buttonGroup1;
         private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
-        private javax.swing.JFileChooser jFileChooser1;
         private java.awt.Label label1;
         private java.awt.Label label2;
         private java.awt.Label label3;
