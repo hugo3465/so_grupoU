@@ -77,6 +77,7 @@ public class TasksCircularChart extends JFrame {
 
         // Repinta o painel do gráfico
         // ((ChartPanel) getContentPane().getComponent(0)).repaint();
+        repaint();
 
     }
 

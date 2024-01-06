@@ -1,5 +1,6 @@
 package util;
 
+import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import core.Task;
@@ -8,11 +9,11 @@ import core.Task;
  * A prioridade das tarefas vai vão ser estaticas
  */
 public class TaskScheduler {
-    private LinkedBlockingQueue<Task> highPriorityTasks;
+    private Queue<Task> highPriorityTasks;
 
     private int highPriorityCount;
 
-    private LinkedBlockingQueue<Task> lowPriorityTasks;
+    private Queue<Task> lowPriorityTasks;
 
     private int lowPriorityCount;
 

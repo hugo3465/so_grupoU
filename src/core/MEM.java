@@ -46,4 +46,8 @@ public class MEM {
 
         this.usedMemmory -= memmoryToDeallocate;
     }
+
+    public int getUsedMemory() {
+        return usedMemmory;
+    }
 }

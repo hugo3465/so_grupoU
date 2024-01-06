@@ -1,6 +1,7 @@
 package core;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import exceptions.OutOfMemmoryException;
 import util.Configs;
@@ -30,13 +31,13 @@ public class Kernel {
     // elemento que está na fila há mais tempo.
     protected TaskScheduler waitingTasks;
 
-    protected ArrayList<Task> tasksOnExecution;
+    protected List<Task> tasksOnExecution;
 
     /**
      * Array que contém todas as tarefas que acabaram de ser executadas pelo sistema
      * operativo.
      */
-    protected ArrayList<Task> tasksTerminated;
+    protected List<Task> tasksTerminated;
 
     /**
      * Indica se o sistema operativo está ligado ou não
@@ -70,7 +71,8 @@ public class Kernel {
         cpuThread = new Thread(cpu);
         cpuThread.start();
 
-        // TODO: testes, vários núcleos. Para apagar, isto foi apenas borga
+        // TODO: testes, vários núcleos. Para apagar, APENAS TESTES PARA AUMENTAR
+        // VELOCIDADE
         // Thread nucleo2 = new Thread(cpu);
         // nucleo2.start();
         // Thread nucleo3 = new Thread(cpu);
@@ -89,8 +91,8 @@ public class Kernel {
     // para ser processada pela CPU
     // acho que podia nem estar syncronized este
     protected synchronized void receiveTask(Task task) {
-        // só pode adicionar tarefas, se o CPU não estiver em processo de
-        if (!isOnShutDownProcess) {
+        // só pode adicionar tarefas, se o CPU não estiver em processo de encerramento
+        if (!isOnShutDownProcess && isOn) {
 
             synchronized (waitingTasks) {
                 waitingTasks.add(task);
@@ -103,18 +105,28 @@ public class Kernel {
         }
     }
 
-    protected void sendTask(Task task, String response) {
-        middleware.receive(task, response);
+    protected void sendToMiddleware(Task task) {
+        try {
+            middleware.receiveSemaphore.acquire();
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
         mem.deallocateMemmory(task.getMemory());
+
+        synchronized (middleware.buffer) {
+            middleware.buffer.addRear(task);
+        }
     }
 
     // encerramento dos sub-componentes e outras coisas
     public void shutdown() {
         this.isOnShutDownProcess = true;
 
+        // descartar todas as tarefas que estavam em espera
         synchronized (waitingTasks) {
-            waitingTasks.clear(); // Optionally, clear the task queue if you want to discard remaining tasks
+            waitingTasks.clear();
         }
 
         // Espera até que todas as tarefas em execução acabem, para encerrar o CPU
@@ -128,10 +140,19 @@ public class Kernel {
             }
         }
 
+        // apaga a lista das tarefas terminadas
+        synchronized (tasksTerminated) {
+            tasksTerminated.clear();
+        }
+
         // quando não houver mais nenhuma tarefa a ser executada ca CPU, encerra o
         // sistema operativo
         this.isOn = false;
         this.isOnShutDownProcess = false;
+    }
+
+    public int getMemoryOnUsage() {
+        return mem.getUsedMemory();
     }
 
     public synchronized void reserveMemory(int memoryToReserve) throws OutOfMemmoryException {
