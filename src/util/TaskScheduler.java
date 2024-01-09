@@ -10,11 +10,24 @@ import core.Task;
  * A prioridade das tarefas é estática
  */
 public class TaskScheduler {
+    private final int STARVATION_RANGE = 5;
+
     private Queue<Task> highPriorityTasks;
     private int highPriorityCount;
 
     private Queue<Task> lowPriorityTasks;
     private int lowPriorityCount;
+
+    /**
+     * Serve para evitar problemas de starvation, por cada x
+     * {@code highPriorityTask} que executam, uma {@code lowPriorityTasks} vai
+     * executar.
+     * 
+     * O número de {@code highPriorityTasks} que podem executar antes de uma
+     * LowPriority é defenida na constante {@code STARVATION_RANGE}
+     */
+    private int startvationCount;
+    
 
     /**
      * Construtor da classe TaskScheduler
@@ -26,6 +39,7 @@ public class TaskScheduler {
         this.lowPriorityTasks = new LinkedBlockingQueue<>();
         this.highPriorityCount = 0;
         this.lowPriorityCount = 0;
+        this.startvationCount = 0;
     }
 
     /**
@@ -61,13 +75,37 @@ public class TaskScheduler {
         }
 
         Task removedTask = null;
-        if (!highPriorityTasks.isEmpty()) {
-            removedTask = highPriorityTasks.poll();
-            highPriorityCount--;
+
+        // remove lowPriority, caso tenha atingido o STARVATIONCOUNT
+        if (startvationCount >= STARVATION_RANGE && !lowPriorityTasks.isEmpty()) {
+            removedTask = removeLowPriorityTask();
+        } else if (!highPriorityTasks.isEmpty()) {
+            removedTask = removeHighPrioriTask();
         } else if (!lowPriorityTasks.isEmpty()) {
-            removedTask = lowPriorityTasks.poll();
-            lowPriorityCount--;
+            removedTask = removeLowPriorityTask();
         }
+
+        return removedTask;
+    }
+
+    private Task removeLowPriorityTask() {
+        Task removedTask = null;
+
+        removedTask = lowPriorityTasks.poll();
+        lowPriorityCount--;
+
+        startvationCount = 0;
+
+        return removedTask;
+    }
+
+    private Task removeHighPrioriTask() {
+        Task removedTask = null;
+
+        removedTask = highPriorityTasks.poll();
+        highPriorityCount--;
+
+        startvationCount++;
 
         return removedTask;
     }
@@ -80,6 +118,7 @@ public class TaskScheduler {
         lowPriorityTasks.clear();
         highPriorityCount = 0;
         lowPriorityCount = 0;
+        startvationCount = 0;
     }
 
     /**
