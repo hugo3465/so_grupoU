@@ -109,7 +109,6 @@ public class Kernel {
         try {
             middleware.receiveSemaphore.acquire();
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 

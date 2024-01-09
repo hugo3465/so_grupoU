@@ -1,4 +1,3 @@
-import core.Middleware;
 import core.Task;
 import enums.TaskPriority;
 
@@ -16,7 +15,6 @@ public class Demo {
         try {
             thread.join();
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
        System.out.println(task1.getResponse()); 
@@ -25,7 +23,6 @@ public class Demo {
         // try {
         //     Thread.sleep(5000);
         // } catch (InterruptedException e) {
-        //     // TODO Auto-generated catch block
         //     e.printStackTrace();
         // }
 
