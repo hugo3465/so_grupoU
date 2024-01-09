@@ -1,26 +1,26 @@
-package application;
-
+package application.charts;
 import javax.swing.JFrame;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 
-import util.Configs;
+/**
+ * Representa um gráfico de barras para visualizar a quantidade de tarefas em diferentes estados.
+ */
+public class TaskBarChart extends JFrame {
 
-public class MemoryBarChart extends JFrame{
     private JFreeChart chart;
     private DefaultCategoryDataset dataset;
 
     /**
-     * Construtor da classe MemmoryChart.
+     * Construtor da classe TaskBarChart.
      *
      * @param title Título do gráfico.
      */
-    public MemoryBarChart(String title) {
+    public TaskBarChart(String title) {
         super(title);
 
         // Cria um conjunto de dados inicial
@@ -29,10 +29,10 @@ public class MemoryBarChart extends JFrame{
         // Cria um gráfico com base no conjunto de dados
         chart = ChartFactory.createBarChart(
                 title,
-                "",
-                "",
+                "Tasks",
+                "Quantity",
                 dataset,
-                PlotOrientation.HORIZONTAL,
+                PlotOrientation.VERTICAL,
                 false,
                 false,
                 false
@@ -40,15 +40,8 @@ public class MemoryBarChart extends JFrame{
 
         // Cria um painel para exibir o gráfico
         ChartPanel chartPanel = new ChartPanel(chart);
-        chartPanel.setPreferredSize(new java.awt.Dimension(300, 165));
+        chartPanel.setPreferredSize(new java.awt.Dimension(500, 350));
         this.setLocation(500, 500);
-
-        // Obtém o eixo do gráfico
-        NumberAxis rangeAxis = (NumberAxis) chart.getCategoryPlot().getRangeAxis();
-
-        // Define o valor máximo para o eixo (mude conforme necessário)
-        long maxValue = Configs.getTamanhoMem(); // Example: set the maximum value to 100
-        rangeAxis.setRange(0, maxValue);
 
         // Configura o JFrame
         setContentPane(chartPanel);
@@ -64,28 +57,28 @@ public class MemoryBarChart extends JFrame{
      */
     private DefaultCategoryDataset createDataset() {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-        dataset.addValue(0, "", "");
+        dataset.addValue(0, "", "Waiting");
+        dataset.addValue(0, "", "Executing");
         return dataset;
     }
 
     /**
-     * Atualiza o conjunto de dados com novos valores para tarefas em diferentes
-     * estados.
+     * Atualiza o conjunto de dados com novos valores para tarefas em diferentes estados.
      *
      * @param waitingTasks   Quantidade de tarefas em espera.
      * @param executingTasks Quantidade de tarefas em execução.
      */
-    public void updateDataset(int ammountOfMemmory) {
-        // Atualiza os valores no conjunto de dados (substitua esta lógica conforme
-        // necessário)
-        dataset.setValue(ammountOfMemmory, "", "");
+    public void updateDataset(int waitingTasks, int executingTasks) {
+        // Atualiza os valores no conjunto de dados (substitua esta lógica conforme necessário)
+        dataset.setValue(waitingTasks, "", "Waiting");
+        dataset.setValue(executingTasks, "", "Executing");
 
         // Notifica o gráfico de que o conjunto de dados foi alterado
-        // JFreeChart chart = ((ChartPanel)
-        // getContentPane().getComponent(0)).getChart();
+        // JFreeChart chart = ((ChartPanel) getContentPane().getComponent(0)).getChart();
         // chart.fireChartChanged();
 
-        // Repinta o painel do gráfico
+        // // Repinta o painel do gráfico
+        // ((ChartPanel) getContentPane().getComponent(0)).repaint();
         repaint();
     }
 
@@ -95,4 +88,5 @@ public class MemoryBarChart extends JFrame{
     public void close() {
         this.dispose();
     }
+
 }

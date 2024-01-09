@@ -1,4 +1,4 @@
-package application;
+package application.charts;
 import javax.swing.JFrame;
 
 import org.jfree.chart.ChartFactory;
