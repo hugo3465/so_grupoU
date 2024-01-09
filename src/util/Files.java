@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A classe Files contém métodos para leitura e escrita de arquivos.
+ */
 public class Files {
 
     /**
@@ -35,9 +38,9 @@ public class Files {
      * Método responsável por ler um ficheiro
      *
      * @param nameFile Nome do ficheiro
-     * @param Linha Linha a adicionar no ficheiro
+     * @param Linha    Linha a adicionar no ficheiro
      * @return True caso seja adicionada a linha com sucesso, False caso
-     * contrário
+     *         contrário
      */
     public static boolean writeFile(String nameFile, String Linha) {
         try {

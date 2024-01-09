@@ -11,12 +11,19 @@ import org.jfree.data.category.DefaultCategoryDataset;
 
 import util.Configs;
 
-public class MemoryBarChart extends JFrame{
+/**
+ * A classe `MemoryBarChart` representa um gráfico de barras para visualização
+ * de dados relacionados à memória.
+ * Utiliza a biblioteca JFreeChart para criar e exibir o gráfico.
+ */
+public class MemoryBarChart extends JFrame {
+    /** O gráfico JFreeChart a ser exibido. */
     private JFreeChart chart;
+    /** O conjunto de dados para o gráfico de barras. */
     private DefaultCategoryDataset dataset;
 
     /**
-     * Construtor da classe MemmoryChart.
+     * Construtor da classe MemoryBarChart.
      *
      * @param title Título do gráfico.
      */
@@ -35,8 +42,7 @@ public class MemoryBarChart extends JFrame{
                 PlotOrientation.HORIZONTAL,
                 false,
                 false,
-                false
-        );
+                false);
 
         // Cria um painel para exibir o gráfico
         ChartPanel chartPanel = new ChartPanel(chart);

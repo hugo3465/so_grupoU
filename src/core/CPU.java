@@ -11,10 +11,23 @@ import util.Configs;
  * - executar tarefas
  * (se calhar coloco aqui um round robin, ou um scheduler)
  */
+
+/**
+ * Representa a unidade de processamento (CPU) do sistema.
+ * Realiza a gestão, escalonamento e execução de tarefas.
+ * Utiliza um mecanismo de round robin ou um scheduler para realizar o
+ * escalonamento.
+ */
 public class CPU implements Runnable {
 
+    /** O kernel associado à CPU. */
     private final Kernel kernel;
 
+    /**
+     * Construtor da classe `CPU`.
+     *
+     * @param kernel O kernel associado à CPU.
+     */
     public CPU(Kernel kernel) {
         this.kernel = kernel;
 
@@ -22,6 +35,10 @@ public class CPU implements Runnable {
         Task.setCPU(this);
     }
 
+    /**
+     * Implementação do método `run` da interface `Runnable`.
+     * Realiza a execução contínua das tarefas enquanto o sistema estiver ativo.
+     */
     @Override
     public void run() {
         try {
@@ -71,6 +88,14 @@ public class CPU implements Runnable {
 
     }
 
+    /**
+     * Método protegido que é chamado quando uma tarefa é concluída.
+     * Remove a tarefa da lista de tarefas em execução e a adiciona à lista de
+     * tarefas terminadas.
+     * Em seguida, envia a tarefa para o middleware através do kernel.
+     *
+     * @param task A tarefa que foi concluída.
+     */
     protected synchronized void taskCompleted(Task task) {
 
         synchronized (kernel.tasksOnExecution) {

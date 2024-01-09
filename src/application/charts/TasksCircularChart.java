@@ -1,4 +1,5 @@
 package application.charts;
+
 import javax.swing.JFrame;
 
 import org.jfree.chart.ChartFactory;
@@ -8,10 +9,13 @@ import org.jfree.data.general.DefaultPieDataset;
 import java.awt.Dimension;
 
 /**
- * Representa um gráfico circular para visualizar a distribuição de tarefas em diferentes estados.
+ * Representa um gráfico circular para visualizar a distribuição de tarefas em
+ * diferentes estados.
  */
 public class TasksCircularChart extends JFrame {
+    /** O gráfico JFreeChart a ser exibido. */
     private JFreeChart chart;
+    /** O conjunto de dados para o gráfico circular. */
     private DefaultPieDataset<String> dataset;
 
     /**
@@ -58,7 +62,8 @@ public class TasksCircularChart extends JFrame {
     }
 
     /**
-     * Atualiza o conjunto de dados com novos valores para tarefas em diferentes estados.
+     * Atualiza o conjunto de dados com novos valores para tarefas em diferentes
+     * estados.
      *
      * @param waitingTasks   Quantidade de tarefas em espera.
      * @param executingTasks Quantidade de tarefas em execução.
@@ -66,13 +71,15 @@ public class TasksCircularChart extends JFrame {
      */
     public void updateDataset(int waitingTasks, int executingTasks, int finishedTasks) {
 
-        // Atualiza os valores no conjunto de dados (substitua esta lógica conforme necessário)
+        // Atualiza os valores no conjunto de dados (substitua esta lógica conforme
+        // necessário)
         dataset.setValue("Waiting", waitingTasks);
         dataset.setValue("Executing", executingTasks);
         dataset.setValue("Finished", finishedTasks);
 
         // Notifica o gráfico de que o conjunto de dados foi alterado
-        // JFreeChart chart = ((ChartPanel) getContentPane().getComponent(0)).getChart();
+        // JFreeChart chart = ((ChartPanel)
+        // getContentPane().getComponent(0)).getChart();
         // chart.fireChartChanged();
 
         // Repinta o painel do gráfico

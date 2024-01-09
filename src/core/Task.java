@@ -77,6 +77,19 @@ public class Task implements Runnable {
         cpu = cpuInstance;
     }
 
+    /**
+     * Implementação do método run() da interface Runnable. Este método representa a
+     * lógica
+     * de execução da tarefa quando é iniciada em uma thread separada.
+     *
+     * Durante a execução, a tarefa exibe mensagens no console e no log, dorme pelo
+     * tempo
+     * especificado como tempo estimado para a execução e, finalmente, define a
+     * resposta da
+     * tarefa e avisa a CPU que a tarefa foi concluída.
+     *
+     * @see java.lang.Runnable
+     */
     @Override
     public void run() {
         try {
@@ -135,10 +148,20 @@ public class Task implements Runnable {
         return this.expectedTime;
     }
 
+    /**
+     * Obtém a quantidade de memória que a tarefa utiliza.
+     *
+     * @return Quantidade de memória da tarefa.
+     */
     public int getMemory() {
         return memory;
     }
 
+    /**
+     * Obtém a resposta que a tarefa dará quando for executada.
+     *
+     * @return Resposta da tarefa.
+     */
     public String getResponse() {
         return response;
     }

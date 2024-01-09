@@ -1,4 +1,5 @@
 package application.charts;
+
 import javax.swing.JFrame;
 
 import org.jfree.chart.ChartFactory;
@@ -8,11 +9,14 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 /**
- * Representa um gráfico de barras para visualizar a quantidade de tarefas em diferentes estados.
+ * Representa um gráfico de barras para visualizar a quantidade de tarefas em
+ * diferentes estados.
  */
 public class TaskBarChart extends JFrame {
 
+    /** O gráfico JFreeChart a ser exibido. */
     private JFreeChart chart;
+    /** O conjunto de dados para o gráfico de barras. */
     private DefaultCategoryDataset dataset;
 
     /**
@@ -35,8 +39,7 @@ public class TaskBarChart extends JFrame {
                 PlotOrientation.VERTICAL,
                 false,
                 false,
-                false
-        );
+                false);
 
         // Cria um painel para exibir o gráfico
         ChartPanel chartPanel = new ChartPanel(chart);
@@ -63,18 +66,21 @@ public class TaskBarChart extends JFrame {
     }
 
     /**
-     * Atualiza o conjunto de dados com novos valores para tarefas em diferentes estados.
+     * Atualiza o conjunto de dados com novos valores para tarefas em diferentes
+     * estados.
      *
      * @param waitingTasks   Quantidade de tarefas em espera.
      * @param executingTasks Quantidade de tarefas em execução.
      */
     public void updateDataset(int waitingTasks, int executingTasks) {
-        // Atualiza os valores no conjunto de dados (substitua esta lógica conforme necessário)
+        // Atualiza os valores no conjunto de dados (substitua esta lógica conforme
+        // necessário)
         dataset.setValue(waitingTasks, "", "Waiting");
         dataset.setValue(executingTasks, "", "Executing");
 
         // Notifica o gráfico de que o conjunto de dados foi alterado
-        // JFreeChart chart = ((ChartPanel) getContentPane().getComponent(0)).getChart();
+        // JFreeChart chart = ((ChartPanel)
+        // getContentPane().getComponent(0)).getChart();
         // chart.fireChartChanged();
 
         // // Repinta o painel do gráfico

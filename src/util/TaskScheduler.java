@@ -27,7 +27,6 @@ public class TaskScheduler {
      * LowPriority é defenida na constante {@code STARVATION_RANGE}
      */
     private int startvationCount;
-    
 
     /**
      * Construtor da classe TaskScheduler
@@ -88,6 +87,13 @@ public class TaskScheduler {
         return removedTask;
     }
 
+    /**
+     * Remove e retorna a próxima tarefa de baixa prioridade da fila. Atualiza o
+     * contador de tarefas de baixa prioridade e zera o contador de starvation.
+     *
+     * @return A próxima tarefa de baixa prioridade, ou null se a fila estiver
+     *         vazia.
+     */
     private Task removeLowPriorityTask() {
         Task removedTask = null;
 
@@ -99,6 +105,12 @@ public class TaskScheduler {
         return removedTask;
     }
 
+    /**
+     * Remove e retorna a próxima tarefa de alta prioridade da fila. Atualiza o
+     * contador de tarefas de alta prioridade e incrementa o contador de starvation.
+     *
+     * @return A próxima tarefa de alta prioridade, ou null se a fila estiver vazia.
+     */
     private Task removeHighPrioriTask() {
         Task removedTask = null;
 

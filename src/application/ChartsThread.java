@@ -6,6 +6,12 @@ import application.charts.TasksCircularChart;
 import core.Middleware;
 import util.Configs;
 
+/**
+ * A classe `ChartsThread` representa uma thread responsável por atualizar e
+ * exibir gráficos relacionados às estatísticas do sistema.
+ * Utiliza objetos de gráficos específicos, como {@link TasksCircularChart},
+ * {@link TaskBarChart} e {@link MemoryBarChart}.
+ */
 public class ChartsThread implements Runnable {
     /**
      * MidleWear é um objeto partilhado, que serve para obter valores para os
@@ -13,10 +19,20 @@ public class ChartsThread implements Runnable {
      */
     Middleware middleware;
 
+    /**
+     * Construtor da classe `ChartsThread`.
+     *
+     * @param middleware O objeto `Middleware` a ser utilizado para obter valores
+     *                   para os gráficos.
+     */
     public ChartsThread(Middleware middleware) {
         this.middleware = middleware;
     }
 
+    /**
+     * Método principal que executa a thread para atualizar e exibir os gráficos.
+     * Executa até que o sistema operativo seja desligado.
+     */
     @Override
     public void run() {
         // inicia o gráfico circular das Tasks
@@ -31,7 +47,7 @@ public class ChartsThread implements Runnable {
         MemoryBarChart memoryBarChart = new MemoryBarChart("Used Memmory");
         memoryBarChart.setVisible(true);
 
-        // vai executar até que o sistema operativo seja desligado
+        // Executa até que o sistema operativo seja desligado
         while (middleware.isOperational()) {
             // faz update do gráfico de 200 em 200 milisegundos
             try {

@@ -16,23 +16,35 @@ import util.TaskScheduler;
  * linked blockingqueue tem de ficar aqui)
  * - lança a execução dos outros componentes e o seu término
  */
+
+/**
+ * O Kernel representa o núcleo do sistema operativo.
+ * Mantém as estruturas de dados, controla as tarefas a executar e lança a
+ * execução dos outros componentes.
+ */
 public class Kernel {
     // Estruturas de dados e validação
     // Controlo das tarefas a executar
     // Outras responsabilidades
 
+    /** O middleware associado ao kernel. */
     private final Middleware middleware;
     private MEM mem;
     private CPU cpu;
 
     private Thread cpuThread; // acho que posso até tirar isto daqui
 
+    /** A lista de tarefas em espera para execução. */
     // uma linkedBolckingQueue funciona como uma queue, mas a cabeça da fila é o
     // elemento que está na fila há mais tempo.
     protected TaskScheduler waitingTasks;
 
+    /** A lista de tarefas atualmente em execução. */
     protected List<Task> tasksOnExecution;
 
+    /**
+     * A lista de tarefas que foram recentemente terminadas pelo sistema operativo.
+     */
     /**
      * Array que contém todas as tarefas que acabaram de ser executadas pelo sistema
      * operativo.
@@ -50,6 +62,11 @@ public class Kernel {
      */
     private boolean isOnShutDownProcess;
 
+    /**
+     * Construtor da classe `Kernel`.
+     *
+     * @param middleware O middleware associado ao kernel.
+     */
     public Kernel(Middleware middleware) {
         this.middleware = middleware;
 
@@ -60,7 +77,10 @@ public class Kernel {
         this.tasksTerminated = new ArrayList<>();
     }
 
-    // inicializa os sub-componentes e outras coisas
+    /**
+     * Inicializa os sub-componentes e outras configurações do kernel.
+     * Inicializa a CPU e a memória virtual (RAM), e inicia a thread da CPU.
+     */
     public void start() {
         // Inicializar Unidade Central de Processamento (CPU)
         this.cpu = new CPU(this);
@@ -87,9 +107,13 @@ public class Kernel {
         this.isOn = true;
     }
 
-    // Método para receber uma tarefa do Middleware e colocar na lista de espera
-    // para ser processada pela CPU
-    // acho que podia nem estar syncronized este
+    /**
+     * Método para receber uma tarefa do Middleware e colocá-la na lista de espera
+     * para ser processada pela CPU.
+     * Só pode adicionar tarefas se o CPU não estiver em processo de encerramento.
+     *
+     * @param task A tarefa a ser recebida e agendada.
+     */
     protected synchronized void receiveTask(Task task) {
         // só pode adicionar tarefas, se o CPU não estiver em processo de encerramento
         if (!isOnShutDownProcess && isOn) {
@@ -105,6 +129,13 @@ public class Kernel {
         }
     }
 
+    /**
+     * Método protegido para enviar uma tarefa finalizada para o Middleware.
+     * Desaloca a memória utilizada pela tarefa e a adiciona ao buffer do
+     * Middleware.
+     *
+     * @param task A tarefa a ser enviada para o Middleware.
+     */
     protected void sendToMiddleware(Task task) {
         try {
             middleware.receiveSemaphore.acquire();
@@ -119,7 +150,12 @@ public class Kernel {
         }
     }
 
-    // encerramento dos sub-componentes e outras coisas
+    /**
+     * Encerra os sub-componentes e realiza procedimentos de encerramento do sistema
+     * operativo.
+     * Aguarda até que todas as tarefas em execução terminem antes de encerrar a CPU
+     * e o sistema operativo.
+     */
     public void shutdown() {
         this.isOnShutDownProcess = true;
 
@@ -150,18 +186,40 @@ public class Kernel {
         this.isOnShutDownProcess = false;
     }
 
+    /**
+     * Obtém a quantidade de memória em uso no momento.
+     *
+     * @return A quantidade de memória em uso.
+     */
     public int getMemoryOnUsage() {
         return mem.getUsedMemory();
     }
 
+    /**
+     * Reserva uma quantidade específica de memória para uma tarefa.
+     *
+     * @param memoryToReserve A quantidade de memória a ser reservada.
+     * @throws OutOfMemmoryException Se não houver memória suficiente para alocar.
+     */
     public synchronized void reserveMemory(int memoryToReserve) throws OutOfMemmoryException {
         mem.alocateMemmory(memoryToReserve);
     }
 
+    /**
+     * Verifica se o sistema operativo está em processo de encerramento.
+     *
+     * @return `true` se o sistema estiver em processo de encerramento, `false` caso
+     *         contrário.
+     */
     public boolean isOnShutoDownProcess() {
         return this.isOnShutDownProcess;
     }
 
+    /**
+     * Verifica se o sistema operativo está ligado.
+     *
+     * @return `true` se o sistema estiver ligado, `false` caso contrário.
+     */
     public boolean isOn() {
         return isOn;
     }

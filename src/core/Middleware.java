@@ -7,6 +7,11 @@ import java.util.concurrent.Semaphore;
 import util.Logs;
 import util.Buffer;
 
+/**
+ * Representa o Middleware do sistema, que atua como uma interface entre o
+ * satélite e o sistema operativo.
+ * Controla a comunicação entre o satélite e o Kernel.
+ */
 public class Middleware {
     private final int MIDDLEWARE_BUFFER_SEND_SIZE = 3;
     private final int MIDDLEWARE_BUFFER_RECEIVE_SIZE = 2;
@@ -33,6 +38,10 @@ public class Middleware {
      */
     protected Semaphore receiveSemaphore;
 
+    /**
+     * Construtor da classe `Middleware`.
+     * Inicializa o kernel, os semáforos e o buffer.
+     */
     public Middleware() {
         this.kernel = new Kernel(this);
 
@@ -41,7 +50,11 @@ public class Middleware {
         this.buffer = new Buffer<>(MIDDLEWARE_SIZE);
     }
 
-    // Método para enviar dados do satélite para a estação
+    /**
+     * Método para enviar dados do satélite para a estação.
+     *
+     * @param task A tarefa a ser enviada.
+     */
     public synchronized void send(Task task) {
         System.out.println("A enviar dados");
 
@@ -68,8 +81,9 @@ public class Middleware {
     }
 
     /**
-     * Método para receber dados da estação para o satélite
-     * 
+     * Método para receber dados da estação para o satélite.
+     *
+     * @return A tarefa recebida.
      */
     public synchronized Task receive() {
 
@@ -96,6 +110,9 @@ public class Middleware {
         return answeredTask;
     }
 
+    /**
+     * Inicia o sistema operativo (Kernel) e registra o evento no log.
+     */
     public void turnOnOperatingSystem() {
         System.out.println("A iniciar o Sistema Operativo...");
         kernel.start();
@@ -106,6 +123,9 @@ public class Middleware {
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
     }
 
+    /**
+     * Encerra o sistema operativo (Kernel) e registra o evento no log.
+     */
     public void turnOffOperatingSystem() {
         System.out.println("A encerrar o Sistema Operativo...");
         kernel.shutdown();
@@ -116,22 +136,48 @@ public class Middleware {
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
     }
 
+    /**
+     * Obtém o número de tarefas em espera no sistema operativo.
+     *
+     * @return O número de tarefas em espera.
+     */
     public int getNumberOfWaitingTasks() {
         return kernel.waitingTasks.size();
     }
 
+    /**
+     * Obtém o número de tarefas em execução no sistema operativo.
+     *
+     * @return O número de tarefas em execução.
+     */
     public int getNumberOfExecutingTasks() {
         return kernel.tasksOnExecution.size();
     }
 
+    /**
+     * Obtém o número de tarefas concluídas no sistema operativo.
+     *
+     * @return O número de tarefas concluídas.
+     */
     public int getNumberOfFinishedTasks() {
         return kernel.tasksTerminated.size();
     }
 
+    /**
+     * Verifica se o sistema operativo está operacional.
+     *
+     * @return `true` se o sistema operativo estiver operacional, `false` caso
+     *         contrário.
+     */
     public boolean isOperational() {
         return kernel.isOn();
     }
 
+    /**
+     * Obtém a quantidade de memória em uso no sistema operativo.
+     *
+     * @return A quantidade de memória em uso.
+     */
     public int getMemoryOnUsage() {
         return kernel.getMemoryOnUsage();
     }
