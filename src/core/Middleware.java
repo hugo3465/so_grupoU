@@ -2,10 +2,8 @@ package core;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.Semaphore;
 
-import application.App;
 import util.Logs;
 import util.Buffer;
 

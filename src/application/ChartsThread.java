@@ -1,5 +1,8 @@
 package application;
 
+import application.charts.MemoryBarChart;
+import application.charts.TaskBarChart;
+import application.charts.TasksCircularChart;
 import core.Middleware;
 import util.Configs;
 
