@@ -105,7 +105,7 @@ public class Kernel {
         }
     }
 
-    protected void sendToMiddleware(Task task) {
+    protected synchronized void sendToMiddleware(Task task) {
         try {
             middleware.receiveSemaphore.acquire();
         } catch (InterruptedException e) {
