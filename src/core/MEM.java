@@ -14,14 +14,8 @@ import exceptions.OutOfMemmoryException;
  */
 public class MEM {
 
-    /**
-     * 
-     */
-    private final int MEMORY_MAX_SIZE = 500;
+    private final int MEMMORY_SIZE = 500;
 
-    /**
-     * 
-     */
     private int usedMemmory;
 
     /**
@@ -38,7 +32,7 @@ public class MEM {
      * @return `true` se a memória estiver cheia, `false` caso contrário.
      */
     public boolean isFull() {
-        return (usedMemmory == MEMORY_MAX_SIZE);
+        return (usedMemmory == MEMMORY_SIZE);
     }
 
     /**
@@ -57,7 +51,7 @@ public class MEM {
      * @throws OutOfMemmoryException Se a memória estiver completamente utilizada.
      */
     public synchronized void alocateMemmory(int memmoryToAllocate) throws OutOfMemmoryException {
-        if (isFull() || (usedMemmory + memmoryToAllocate) > MEMORY_MAX_SIZE) {
+        if (isFull() || (usedMemmory + memmoryToAllocate) > MEMMORY_SIZE) {
             throw new OutOfMemmoryException();
         }
 

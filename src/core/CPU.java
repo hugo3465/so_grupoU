@@ -4,15 +4,6 @@ import exceptions.OutOfMemmoryException;
 import util.Configs;
 
 /**
- * unidade de processamento
- * O que deve fazer:
- * - Gerir tarefas
- * - escalonar tarefas
- * - executar tarefas
- * (se calhar coloco aqui um round robin, ou um scheduler)
- */
-
-/**
  * Representa a unidade de processamento (CPU) do sistema.
  * Realiza a gestão, escalonamento e execução de tarefas.
  * Utiliza um mecanismo de round robin ou um scheduler para realizar o
@@ -20,7 +11,9 @@ import util.Configs;
  */
 public class CPU implements Runnable {
 
-    /** O kernel associado à CPU. */
+    /**
+     * O kernel associado à CPU.
+     */
     private final Kernel kernel;
 
     /**

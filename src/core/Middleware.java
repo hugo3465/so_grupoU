@@ -75,7 +75,7 @@ public class Middleware {
 
             sendSemaphore.release();
 
-        } catch (Exception e) { // mudar para InterruptedException
+        } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
     }

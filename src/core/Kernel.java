@@ -9,23 +9,11 @@ import util.Logs;
 import util.TaskScheduler;
 
 /**
- * Kernel do sistema operativo
- * O que deve fazer:
- * - mantém as estruturas de dados e respetiva validação
- * - controla as tarefas a executar (prioridade provavelmente)(se calhar a
- * linked blockingqueue tem de ficar aqui)
- * - lança a execução dos outros componentes e o seu término
- */
-
-/**
  * O Kernel representa o núcleo do sistema operativo.
  * Mantém as estruturas de dados, controla as tarefas a executar e lança a
  * execução dos outros componentes.
  */
 public class Kernel {
-    // Estruturas de dados e validação
-    // Controlo das tarefas a executar
-    // Outras responsabilidades
 
     /** O middleware associado ao kernel. */
     private final Middleware middleware;

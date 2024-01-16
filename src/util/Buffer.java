@@ -4,12 +4,22 @@ import java.util.Iterator;
 
 import exceptions.FullBufferException;
 
+/**
+ * Um buffer circular genérico que suporta adição e remoção de elementos na frente e atrás.
+ *
+ * @param <T> o tipo de elementos armazenados no buffer
+ */
 public class Buffer<T> implements Iterable<T> {
     private T[] buffer;
     private int count;
     private int front;
     private int rear;
 
+    /**
+     * Cria um buffer com o comprimento especificado.
+     *
+     * @param length o comprimento do buffer
+     */
     public Buffer(int length) {
         this.buffer = (T[]) new Object[length];
         this.count = 0;
@@ -17,6 +27,12 @@ public class Buffer<T> implements Iterable<T> {
         this.rear = 0;
     }
 
+    /**
+     * Adiciona um elemento à frente do buffer.
+     *
+     * @param element o elemento a ser adicionado
+     * @throws FullBufferException se o buffer estiver cheio
+     */
     public void addFront(T element) {
         if (isFull()) {
             throw new FullBufferException("Buffer is full!");
@@ -28,6 +44,12 @@ public class Buffer<T> implements Iterable<T> {
 
     }
 
+    /**
+     * Adiciona um elemento atrás do buffer.
+     *
+     * @param element o elemento a ser adicionado
+     * @throws FullBufferException se o buffer estiver cheio
+     */
     public void addRear(T element) {
         if (isFull()) {
             throw new FullBufferException("Buffer is full!");
@@ -39,6 +61,11 @@ public class Buffer<T> implements Iterable<T> {
 
     }
 
+    /**
+     * Remove e retorna o elemento da frente do buffer.
+     *
+     * @return o elemento removido ou null se o buffer estiver vazio
+     */
     public T removeFront() {
         if (isEmpty()) {
             return null;
@@ -50,6 +77,11 @@ public class Buffer<T> implements Iterable<T> {
         return removedElement;
     }
 
+    /**
+     * Remove e retorna o elemento de trás do buffer.
+     *
+     * @return o elemento removido ou null se o buffer estiver vazio
+     */
     public T removeRear() {
         if (isEmpty()) {
             return null;
@@ -61,14 +93,29 @@ public class Buffer<T> implements Iterable<T> {
         return removedElement;
     }
 
+    /**
+     * Verifica se o buffer está cheio.
+     *
+     * @return true se o buffer estiver cheio, false caso contrário
+     */
     public boolean isFull() {
         return count == buffer.length;
     }
 
+    /**
+     * Verifica se o buffer está vazio.
+     *
+     * @return true se o buffer estiver vazio, false caso contrário
+     */
     public boolean isEmpty() {
         return count == 0;
     }
 
+    /**
+     * Retorna um iterador para percorrer os elementos no buffer.
+     *
+     * @return um iterador para os elementos no buffer
+     */
     @Override
     public Iterator<T> iterator() {
         return new BufferIterator();
