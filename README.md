@@ -3,7 +3,7 @@ Uma aplicação de simulação de sistema operativo de um satélite que gere dua
 
 ## Como executar
 ```
-javac -encoding utf8 -cp .\lib\jfreechart-1.5.4.jar -d .\bin -sourcepath .\src .\src\*.java
+javac -encoding utf8 -cp .\lib\jfreechart-1.5.4.jar -d .\bin -sourcepath .\src .\src\application\App.java
 java -cp .\lib\jfreechart-1.5.4.jar;.\bin\ .\src\application\App.java
 ```
 
